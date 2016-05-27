@@ -1,10 +1,11 @@
 package unb;
 
-import unb.controlador.Servidor;
+import unb.controlador.*;
 
 public class Fachada {
 	private static Fachada instancia;
-	private Servidor servidor;
+	private Conexao conexao;
+	private Banco banco;
 	
 	public static Fachada obterInstancia(){
 		if(instancia == null){
@@ -14,11 +15,13 @@ public class Fachada {
 	}
 	
 	private Fachada(){
-		servidor = new Servidor();
+		conexao = new Conexao(this);
+		banco = new Banco(this);
 	}
 
-	public void iniciarServidor() {
-		servidor.escutar();
+	public void init() {
+		banco.carregaUsuarios();
+//		conexao.escutar();
 	}
 
 }

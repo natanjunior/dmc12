@@ -7,7 +7,7 @@ public class DMC12Server {
 	public static void main(String[] args) {
 		fachada = Fachada.obterInstancia();
 		
-		fachada.iniciarServidor();
+		fachada.init();
 	}
 
 }
