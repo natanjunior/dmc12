@@ -1,3 +1,5 @@
+// FACHADA DE SERVIDOR
+
 package unb;
 
 import unb.controlador.*;
@@ -21,7 +23,16 @@ public class Fachada {
 
 	public void init() {
 		banco.carregaUsuarios();
-//		conexao.escutar();
+		conexao.escutar();
+	}
+
+	public int cadastrarCliente(String endereco, String nome, String chave) {
+		Cliente c = new Cliente(nome, chave, endereco);
+		int id = banco.addCliente(c);
+//		if(id>0){
+//			conexao.enviarMsg(Integer.toString(id));
+//		}
+		return id;
 	}
 
 }

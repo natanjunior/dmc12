@@ -1,3 +1,5 @@
+// FACHADA DE CLIENTE
+
 package unb;
 
 import java.math.*;
@@ -25,11 +27,25 @@ public class Fachada {
 	}
 
 	public void init() {
-		tela.inicial();
+//		tela.inicial();
+		cadastrar("natan", "senha");
 	}
 
 	public void entrar(String chave) {
-	    conexao.enviarMsg("1 "+pegarHash(chave));
+		int id = Integer.parseInt(conexao.enviarMsg("0 "+pegarHash(chave)));
+	}
+	
+	public void cadastrar(String nome, String senha){
+		String chave = pegarHash(nome+senha);
+		int id = Integer.parseInt(conexao.enviarMsg("1 "+nome+" "+chave));
+		if(id>0){
+			cliente.setNome(nome);
+			cliente.setId(id);
+			cliente.setChave(chave);
+			tela.principal();
+		}else{
+			
+		}
 	}
 	
 	private String pegarHash(String palavra){

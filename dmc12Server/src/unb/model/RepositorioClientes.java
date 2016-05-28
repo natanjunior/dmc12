@@ -9,5 +9,17 @@ public class RepositorioClientes {
 	
 	public RepositorioClientes(Banco b) {
 		this.banco = b;
+		this.clientes = new ArrayList<Cliente>();
+	}
+
+	public int add(Cliente c) {
+		if(!clientes.contains(c)){
+			int newid = banco.newid();
+			c.setId(newid);
+			clientes.add(c);
+			return newid;
+		}else{
+			return -1;
+		}
 	}
 }

@@ -62,7 +62,7 @@ public class Login extends JPanel {
 		String senha = pfSenha.getPassword().toString();
 		
 		if((nome.length()>0)&&(senha.length()>0)){
-			System.out.println(nome+" "+senha);
+			tela.cadastrar(nome, senha);
 		}
 	}
 	

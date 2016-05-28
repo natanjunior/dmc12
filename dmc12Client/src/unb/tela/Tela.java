@@ -6,6 +6,7 @@ import unb.*;
 public class Tela extends JFrame {
 	private Fachada fachada;
 	private Login login;
+	private Principal principal;
 	
 	public Tela(Fachada f) {
 		super("DMC12 - 1.21 gigawatts!");
@@ -16,7 +17,8 @@ public class Tela extends JFrame {
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.validate();
 		
-		login = new Login(this);		
+		login = new Login(this);
+		principal = new Principal(this);
 	}
 	
 	public void inicial(){
@@ -26,6 +28,15 @@ public class Tela extends JFrame {
 
 	public void entrar(String chave) {
 		fachada.entrar(chave);
+	}
+
+	public void cadastrar(String nome, String senha) {
+		fachada.cadastrar(nome, senha);
+	}
+
+	public void principal() {
+		this.remove(login);
+		this.add(principal);
 	}
 
 }
