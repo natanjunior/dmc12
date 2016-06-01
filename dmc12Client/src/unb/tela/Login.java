@@ -68,11 +68,10 @@ public class Login extends JPanel {
 	
 	public void entrar(){
 		String nome = tfNome.getText();
-		char [] senhaChar = pfSenha.getPassword();
-		String senha = String.valueOf(senhaChar);
+		String senha = pfSenha.getPassword().toString();
 		
 		if((nome.length()>0)&&(senha.length()>0)){
-			tela.entrar(nome+senha);
+			tela.entrar(nome, senha);
 		}
 	}
 	

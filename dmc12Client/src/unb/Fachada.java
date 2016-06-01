@@ -28,11 +28,15 @@ public class Fachada {
 
 	public void init() {
 //		tela.inicial();
-		cadastrar("natan", "senha");
+		entrar("natan", "natan");
 	}
 
-	public void entrar(String chave) {
+	public void entrar(String nome, String senha) {
+		String chave = pegarHash(nome+senha);
 		int id = Integer.parseInt(conexao.enviarMsg("0 "+pegarHash(chave)));
+		if(id>0){
+			System.out.println("gool");
+		}
 	}
 	
 	public void cadastrar(String nome, String senha){

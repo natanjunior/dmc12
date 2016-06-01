@@ -19,5 +19,13 @@ public class Cliente {
 	public void setId(int newid) {
 		this.id = newid;
 	}
+	
+	public String getChave(){
+		return chave;
+	}
+	
+	public int getId(){
+		return id;
+	}
 
 }

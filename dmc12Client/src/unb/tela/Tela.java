@@ -26,8 +26,8 @@ public class Tela extends JFrame {
 		this.setVisible(true);
 	}
 
-	public void entrar(String chave) {
-		fachada.entrar(chave);
+	public void entrar(String nome, String senha) {
+		fachada.entrar(nome, senha);
 	}
 
 	public void cadastrar(String nome, String senha) {

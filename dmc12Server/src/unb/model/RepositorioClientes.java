@@ -6,7 +6,7 @@ import unb.controlador.*;
 public class RepositorioClientes {
 	private ArrayList<Cliente> clientes;
 	private Banco banco;
-	
+
 	public RepositorioClientes(Banco b) {
 		this.banco = b;
 		this.clientes = new ArrayList<Cliente>();
@@ -21,5 +21,14 @@ public class RepositorioClientes {
 		}else{
 			return -1;
 		}
+	}
+
+	public Cliente busca(String nome) {
+		for(Cliente c : clientes) {
+			if (c.getNome().equals(nome)) {
+				return c;
+			}
+		}
+		return null;
 	}
 }

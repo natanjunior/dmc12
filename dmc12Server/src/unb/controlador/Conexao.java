@@ -47,10 +47,11 @@ public class Conexao {
 		
 		switch(comandos[0]){
 		case "0":
-			System.out.println("login");
+			if(comandos.length==3) //	fazer validação
+				retorno = Integer.toString(fachada.loginCliente(comandos[1], comandos[2]));
 			break;
 		case "1":
-			if(comandos.length==3)
+			if(comandos.length==3) //	fazer validação
 				retorno = Integer.toString(fachada.cadastrarCliente(endereco, comandos[1], comandos[2]));		
 			break;
 		}
