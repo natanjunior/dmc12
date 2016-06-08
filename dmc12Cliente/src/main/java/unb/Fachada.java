@@ -2,6 +2,7 @@
 
 package unb;
 
+import java.io.IOException;
 import java.math.*;
 import java.security.*;
 import unb.controlador.*;
@@ -12,6 +13,7 @@ public class Fachada {
 	private Conexao conexao;
 	private Cliente cliente;
 	private Tela tela;
+	private Backup backup;
 	
 	public static Fachada obterInstancia(){
 		if(instancia == null){
@@ -23,12 +25,14 @@ public class Fachada {
 	private Fachada(){
 		tela = new Tela(this);
 		conexao = new Conexao(this);
+		backup = new Backup(this);
 		cliente = new Cliente();
 	}
 
 	public void init() {
-		tela.inicial();
-		tela.principal();
+//		tela.inicial();
+//		tela.principal();
+		comprimir("../../teste");
 	}
 
 	public void entrar(String nome, String senha) {
@@ -74,6 +78,10 @@ public class Fachada {
 
 	public void agendar(String msg) {
 		conexao.enviarMsg("2 "+cliente.getId()+" "+msg);
+	}
+	
+	public void comprimir(String diretorio){
+		backup.comprimir(diretorio);
 	}
 
 }

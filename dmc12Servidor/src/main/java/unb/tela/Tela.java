@@ -9,7 +9,7 @@ public class Tela extends JFrame {
 	private Principal principal;
 
 	public Tela(Fachada f) {
-		super("DMC12 Server - 1.21 gigawatts!");
+		super("DMC12 Server - Mr. Fusion");
 		
 		this.fachada = f;
 		
