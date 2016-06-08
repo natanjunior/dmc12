@@ -14,7 +14,7 @@ public class RepositorioClientes {
 
 	public int add(Cliente c) {
 		if(!clientes.contains(c)){
-			int newid = banco.newid();
+			int newid = banco.newClienteId();
 			c.setId(newid);
 			clientes.add(c);
 			return newid;
@@ -26,6 +26,14 @@ public class RepositorioClientes {
 	public Cliente busca(String nome) {
 		for(Cliente c : clientes) {
 			if (c.getNome().equals(nome))
+				return c;
+		}
+		return null;
+	}
+	
+	public Cliente busca(int id) {
+		for(Cliente c : clientes) {
+			if (c.getId()==id)
 				return c;
 		}
 		return null;

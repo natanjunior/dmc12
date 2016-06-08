@@ -18,7 +18,7 @@ public class Banco {
 	private RepositorioClientes rpClientes;
 	private RepositorioAgendamentos rpAgendamentos;
 	private File arqLog, arqClientes, arqAgendamentos;
-	private int newid;
+	private int newClienteId, newAgendamentoId;
 	private XStream xstream;
 
 	public Banco(Fachada f) {
@@ -30,7 +30,7 @@ public class Banco {
 	}
 
 	public void carregaUsuarios() {
-		this.newid = 1313; // base dos id's
+		this.newClienteId = 1313; // base dos id's
 		arqClientes = new File("clientes.xml");
 		if(!arqClientes.exists()){
 			try {
@@ -57,6 +57,35 @@ public class Banco {
 			}
 		}
 	}
+	
+	public void carregaAgendamentos() {
+		this.newAgendamentoId = 1313; // base dos id's
+		arqAgendamentos = new File("agendamentos.xml");
+		if(!arqAgendamentos.exists()){
+			try {
+				arqAgendamentos.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			try {
+				BufferedReader leitor = new BufferedReader(new FileReader(arqAgendamentos));
+				while(true){
+					String linha = leitor.readLine();
+					if(linha!=null){
+						for(int i=1;i<=6;i++){
+							linha += leitor.readLine();
+						}
+						rpAgendamentos.add(lerAgendamentoXML(linha));
+					}else{
+						break;
+					}
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public int addCliente(Cliente c) {
 		int id = rpClientes.add(c);
@@ -68,9 +97,14 @@ public class Banco {
 		return id;
 	}
 
-	public int newid() {
-		this.newid++;
-		return newid;
+	public int newClienteId() {
+		this.newClienteId++;
+		return newClienteId;
+	}
+	
+	public int newAgendamentoId() {
+		this.newAgendamentoId++;
+		return newAgendamentoId;
 	}
 
 	public void escreverArq(File arq, String txt){
@@ -89,9 +123,29 @@ public class Banco {
 		xstream.alias("cliente", Cliente.class);
 		return  (Cliente) xstream.fromXML(xml);
 	}
+	
+	public Agendamento lerAgendamentoXML(String xml){
+		xstream.alias("agendamento", Agendamento.class);
+		return  (Agendamento) xstream.fromXML(xml);
+	}
 
 	public Cliente buscaCliente(String nome) {
 		return rpClientes.busca(nome);
+	}
+	
+	public Cliente buscaCliente(int id) {
+		return rpClientes.busca(id);
+	}
+
+	public int addAgendamento(Agendamento a) {
+		int id = rpAgendamentos.add(a);
+		if(id>0){
+			xstream.alias("agendamento", Agendamento.class);
+			xstream.autodetectAnnotations(true);
+			String xml = xstream.toXML(a);
+			escreverArq(arqAgendamentos, xml);
+		}
+		return id;
 	}
 
 }

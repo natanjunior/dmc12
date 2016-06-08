@@ -14,7 +14,7 @@ public class RepositorioAgendamentos {
 
 	public int add(Agendamento a) {
 		if(!agendamentos.contains(a)){
-			int newid = banco.newid();
+			int newid = banco.newAgendamentoId();
 			a.setId(newid);
 			agendamentos.add(a);
 			return newid;

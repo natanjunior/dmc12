@@ -30,9 +30,10 @@ public class Fachada {
 	}
 
 	public void init() {
-//		tela.inicial();
+		tela.inicial();
 //		tela.principal();
-		comprimir("../../teste");
+		entrar("junior", "123");
+		agendar(" /Users/natan.junior/teste 09/06/2016 03:06:00");
 	}
 
 	public void entrar(String nome, String senha) {
@@ -61,6 +62,10 @@ public class Fachada {
 		}
 	}
 	
+	public void agendar(String msg) {
+		conexao.enviarMsg("2 "+cliente.getId()+msg);
+	}
+	
 	private String pegarHash(String palavra){
 		MessageDigest m = null;
 		try {
@@ -74,10 +79,6 @@ public class Fachada {
 
 	public String nomeCliente() {
 		return cliente.getNome();
-	}
-
-	public void agendar(String msg) {
-		conexao.enviarMsg("2 "+cliente.getId()+" "+msg);
 	}
 	
 	public void comprimir(String diretorio){

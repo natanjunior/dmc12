@@ -26,6 +26,7 @@ public class Fachada {
 
 	public void init() {
 		banco.carregaUsuarios();
+		banco.carregaAgendamentos();
 		tela.inicial();
 		conexao.escutar();
 	}
@@ -46,7 +47,10 @@ public class Fachada {
 		return id;
 	}
 
-	public int agendar(String id, String diretorio, String data, String hora) {
+	public int agendar(String idCliente, String arquivo, String data, String hora) {
+		Cliente c = banco.buscaCliente(Integer.parseInt(idCliente));
+		Agendamento a = new Agendamento(c, arquivo, data, hora);
+		int id = banco.addAgendamento(a);
 		return 0;
 	}
 
