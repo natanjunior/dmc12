@@ -40,6 +40,8 @@ public class Conexao {
 		String[] comandos = payload.split(" ");
 		String retorno = null;
 		
+		System.out.println("retorno " + feedback);
+		
 		switch(comandos[0]){
 		case "0":
 			retorno = feedback;

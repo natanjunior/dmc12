@@ -8,11 +8,17 @@ import java.nio.charset.Charset;
 
 import unb.Fachada;
 
-public class Conexao {
+public class Conexao implements Runnable{
 	private Fachada fachada;
+	private Socket cliente;
 	
 	public Conexao(Fachada f) {
 		this.fachada = f;
+	}
+	
+	public Conexao(Fachada f, Socket c) {
+		this.fachada = f;
+		this.cliente = c;
 	}
 	
 	public void escutar(){
@@ -23,17 +29,9 @@ public class Conexao {
 			while(true) {
 				Socket cliente = servidor.accept();
 				
-				System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
-				InputStream entrada = cliente.getInputStream();
-				String payload = this.comando(cliente.getInetAddress().getHostAddress(), lexer(entrada));
-			    
-				OutputStream saida = cliente.getOutputStream();
-				saida.write(payload.getBytes(Charset.forName("UTF-8")));
-				saida.flush();
-				saida.close();
-				
-				entrada.close();
-				cliente.close();
+				Conexao tratamento = new Conexao(fachada, cliente);
+				Thread t = new Thread(tratamento);
+				t.start();
 			}
 			
 		}catch(Exception e) {
@@ -75,6 +73,27 @@ public class Conexao {
 			messageString = null;
 		}
 	    return messageString;
+	}
+
+	@Override
+	public void run() {
+		try{
+			System.out.println("Cliente conectado: " + this.cliente.getInetAddress().getHostAddress() + 
+					" " + this.cliente.getPort());
+			InputStream entrada = this.cliente.getInputStream();
+			System.out.println(entrada);
+			String payload = this.comando(cliente.getInetAddress().getHostAddress(), lexer(entrada));
+		    
+			OutputStream saida = cliente.getOutputStream();
+			saida.write(payload.getBytes(Charset.forName("UTF-8")));
+			saida.flush();
+			saida.close();
+			
+			entrada.close();
+			cliente.close();
+		}catch(Exception e) {
+			System.out.println("Erro: " + e.getMessage());
+		}
 	}
 	
 //	public void enviarMsg(String payload){

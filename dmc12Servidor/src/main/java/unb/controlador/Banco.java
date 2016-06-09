@@ -73,7 +73,7 @@ public class Banco {
 				while(true){
 					String linha = leitor.readLine();
 					if(linha!=null){
-						for(int i=1;i<=6;i++){
+						for(int i=1;i<=11;i++){
 							linha += leitor.readLine();
 						}
 						rpAgendamentos.add(lerAgendamentoXML(linha));

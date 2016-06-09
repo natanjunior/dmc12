@@ -4,7 +4,6 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 public class Agendamento {
 	private int id;
-	@XStreamOmitField
 	private Cliente cliente;
 	private String arquivo;
 	private String data; //	* ver o que é melhor
