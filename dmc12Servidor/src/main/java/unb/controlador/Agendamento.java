@@ -19,4 +19,12 @@ public class Agendamento {
 	public void setId(int newid) {
 		this.id = newid;
 	}
+	
+	public int getId(){
+		return id;
+	}
+	
+	public String getArquivo(){
+		return arquivo;
+	}
 }

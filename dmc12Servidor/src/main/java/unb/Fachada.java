@@ -2,6 +2,8 @@
 
 package unb;
 
+import java.util.ArrayList;
+
 import unb.controlador.*;
 import unb.tela.Tela;
 
@@ -19,9 +21,9 @@ public class Fachada {
 	}
 	
 	private Fachada(){
-		tela = new Tela(this);
 		conexao = new Conexao(this);
 		banco = new Banco(this);
+		tela = new Tela(this);
 	}
 
 	public void init() {
@@ -52,6 +54,14 @@ public class Fachada {
 		Agendamento a = new Agendamento(c, arquivo, data, hora);
 		int id = banco.addAgendamento(a);
 		return 0;
+	}
+
+	public ArrayList<Cliente> getClientes() {
+		return banco.getClientes();
+	}
+
+	public ArrayList<Agendamento> getAgendamentos() {
+		return banco.getAgendamentos();
 	}
 
 }

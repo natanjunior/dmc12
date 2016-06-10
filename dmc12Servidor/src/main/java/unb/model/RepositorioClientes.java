@@ -38,4 +38,8 @@ public class RepositorioClientes {
 		}
 		return null;
 	}
+
+	public ArrayList<Cliente> getClientes() {
+		return clientes;
+	}
 }

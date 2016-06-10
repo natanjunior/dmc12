@@ -22,4 +22,8 @@ public class RepositorioAgendamentos {
 			return -1;
 		}
 	}
+
+	public ArrayList<Agendamento> getAgendamentos() {
+		return agendamentos;
+	}
 }

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -146,6 +147,14 @@ public class Banco {
 			escreverArq(arqAgendamentos, xml);
 		}
 		return id;
+	}
+
+	public ArrayList<Cliente> getClientes() {
+		return rpClientes.getClientes();
+	}
+
+	public ArrayList<Agendamento> getAgendamentos() {
+		return rpAgendamentos.getAgendamentos();
 	}
 
 }
