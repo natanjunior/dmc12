@@ -79,9 +79,8 @@ public class Conexao implements Runnable{
 	public void run() {
 		try{
 			System.out.println("Cliente conectado: " + this.cliente.getInetAddress().getHostAddress() + 
-					" " + this.cliente.getPort());
+					"	Porta: " + this.cliente.getPort());
 			InputStream entrada = this.cliente.getInputStream();
-			System.out.println(entrada);
 			String payload = this.comando(cliente.getInetAddress().getHostAddress(), lexer(entrada));
 		    
 			OutputStream saida = cliente.getOutputStream();
@@ -94,6 +93,10 @@ public class Conexao implements Runnable{
 		}catch(Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 		}
+	}
+
+	public void fazerBackup() {
+		
 	}
 	
 //	public void enviarMsg(String payload){

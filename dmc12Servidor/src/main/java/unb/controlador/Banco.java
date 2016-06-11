@@ -60,7 +60,7 @@ public class Banco {
 	}
 	
 	public void carregaAgendamentos() {
-		this.newAgendamentoId = 1313; // base dos id's
+		this.newAgendamentoId = 1; // base dos id's
 		arqAgendamentos = new File("agendamentos.xml");
 		if(!arqAgendamentos.exists()){
 			try {

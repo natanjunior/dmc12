@@ -30,6 +30,7 @@ public class Fachada {
 		banco.carregaUsuarios();
 		banco.carregaAgendamentos();
 		tela.inicial();
+		conexao.fazerBackup();
 		conexao.escutar();
 	}
 

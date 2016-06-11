@@ -10,6 +10,7 @@ import unb.Fachada;
 
 public class Conexao {
 	private Fachada fachada;
+	private Socket encanamento;
 
 	public Conexao(Fachada f) {
 		this.fachada = f;

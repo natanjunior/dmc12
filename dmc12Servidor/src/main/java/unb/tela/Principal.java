@@ -51,7 +51,7 @@ public class Principal extends JPanel{
 		tbUsuarios = new JTable(mdlUsuario);
 		mdlUsuario.addColumn("Id");
 		mdlUsuario.addColumn("Login");
-		tbUsuarios.getColumnModel().getColumn(0).setPreferredWidth(20);
+		tbUsuarios.getColumnModel().getColumn(0).setPreferredWidth(50);
 		tbUsuarios.getColumnModel().getColumn(1).setPreferredWidth(120);
 		mdlUsuario.setNumRows(0);
 		for (Cliente c : fachada.getClientes()) {
@@ -62,7 +62,7 @@ public class Principal extends JPanel{
 		tbAgendamentos = new JTable(mdlAgendamento);
 		mdlAgendamento.addColumn("Id");
 		mdlAgendamento.addColumn("Arquivo");
-		tbAgendamentos.getColumnModel().getColumn(0).setPreferredWidth(20);
+		tbAgendamentos.getColumnModel().getColumn(0).setPreferredWidth(50);
 		tbAgendamentos.getColumnModel().getColumn(1).setPreferredWidth(120);
 		mdlAgendamento.setNumRows(0);
 		for (Agendamento a : fachada.getAgendamentos()) {

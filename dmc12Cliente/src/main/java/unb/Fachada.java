@@ -4,6 +4,7 @@ package unb;
 
 import java.io.IOException;
 import java.math.*;
+import java.net.Socket;
 import java.security.*;
 import unb.controlador.*;
 import unb.tela.*;
@@ -14,6 +15,8 @@ public class Fachada {
 	private Cliente cliente;
 	private Tela tela;
 	private Backup backup;
+	
+	private Socket socket;
 	
 	public static Fachada obterInstancia(){
 		if(instancia == null){
@@ -33,12 +36,11 @@ public class Fachada {
 		tela.inicial();
 //		tela.principal();
 		entrar("junior", "123");
-		agendar(" /Users/natan.junior/teste 09/06/2016 03:06:00");
+		agendar(" /Users/natan.junior/teste 18/06/2016 03:06:00");
 	}
-
+		
 	public void entrar(String nome, String senha) {
 		String chave = pegarHash(nome+senha);
-		System.out.println(senha);
 		int id = Integer.parseInt(conexao.enviarMsg("0 "+nome+" "+chave));
 		if(id>0){
 			cliente.setNome(nome);
@@ -50,7 +52,6 @@ public class Fachada {
 	
 	public void cadastrar(String nome, String senha){
 		String chave = pegarHash(nome+senha);
-		System.out.println(senha);
 		int id = Integer.parseInt(conexao.enviarMsg("1 "+nome+" "+chave));
 		if(id>0){
 			cliente.setNome(nome);
