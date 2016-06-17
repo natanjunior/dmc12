@@ -22,6 +22,8 @@ public class Fachada {
 	
 	private Fachada(){
 		conexao = new Conexao(this);
+		Thread t = new Thread(conexao);
+		t.start();
 		banco = new Banco(this);
 		tela = new Tela(this);
 	}
@@ -30,8 +32,8 @@ public class Fachada {
 		banco.carregaUsuarios();
 		banco.carregaAgendamentos();
 		tela.inicial();
-		conexao.fazerBackup();
 		conexao.escutar();
+//		conexao.fazerBackup();
 	}
 
 	public int cadastrarCliente(String endereco, String nome, String chave) {

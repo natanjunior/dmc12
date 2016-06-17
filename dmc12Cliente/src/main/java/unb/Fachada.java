@@ -11,11 +11,12 @@ import unb.tela.*;
 
 public class Fachada {
 	private static Fachada instancia;
-	private Conexao conexao;
+	private SocketServidor socketServidor;
+	private SocketCliente socketCliente;
 	private Cliente cliente;
 	private Tela tela;
 	private Backup backup;
-	
+	private int porta;
 	private Socket socket;
 	
 	public static Fachada obterInstancia(){
@@ -27,7 +28,8 @@ public class Fachada {
 	
 	private Fachada(){
 		tela = new Tela(this);
-		conexao = new Conexao(this);
+		socketCliente = new SocketCliente(this);
+		socketServidor = new SocketServidor(this);
 		backup = new Backup(this);
 		cliente = new Cliente();
 	}
@@ -35,13 +37,16 @@ public class Fachada {
 	public void init() {
 		tela.inicial();
 //		tela.principal();
+		Thread t = new Thread(socketServidor);
+		t.start();
+		porta = socketServidor.getPorta();
 		entrar("junior", "123");
 		agendar(" /Users/natan.junior/teste 18/06/2016 03:06:00");
 	}
 		
 	public void entrar(String nome, String senha) {
 		String chave = pegarHash(nome+senha);
-		int id = Integer.parseInt(conexao.enviarMsg("0 "+nome+" "+chave));
+		int id = Integer.parseInt(socketCliente.enviarMsg("0 "+nome+" "+chave));
 		if(id>0){
 			cliente.setNome(nome);
 			cliente.setId(id);
@@ -52,7 +57,7 @@ public class Fachada {
 	
 	public void cadastrar(String nome, String senha){
 		String chave = pegarHash(nome+senha);
-		int id = Integer.parseInt(conexao.enviarMsg("1 "+nome+" "+chave));
+		int id = Integer.parseInt(socketCliente.enviarMsg("1 "+nome+" "+chave));
 		if(id>0){
 			cliente.setNome(nome);
 			cliente.setId(id);
@@ -64,7 +69,7 @@ public class Fachada {
 	}
 	
 	public void agendar(String msg) {
-		conexao.enviarMsg("2 "+cliente.getId()+msg);
+		socketCliente.enviarMsg("2 "+cliente.getId()+msg);
 	}
 	
 	private String pegarHash(String palavra){

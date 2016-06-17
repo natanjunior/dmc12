@@ -8,19 +8,19 @@ import java.nio.charset.Charset;
 
 import unb.Fachada;
 
-public class Conexao {
+public class SocketCliente{
 	private Fachada fachada;
-	private Socket encanamento;
+	private Socket cliente;
+	private int porta;
 
-	public Conexao(Fachada f) {
+	public SocketCliente(Fachada f) {
 		this.fachada = f;
 	}
 
 	public String enviarMsg(String payload){
 		String retorno = null;
 		try{
-			Socket cliente = new Socket("127.0.0.1",2016);
-			
+			cliente = new Socket("127.0.0.1",2016);
 			OutputStream saida = cliente.getOutputStream();
 			saida.write(payload.getBytes(Charset.forName("UTF-8")));
 			saida.flush();
@@ -61,29 +61,11 @@ public class Conexao {
 	    int bytesRead;
 		try {
 			bytesRead = entrada.read(messageByte);
-			messageString = new String(messageByte, 0, bytesRead);;
+			messageString = new String(messageByte, 0, bytesRead);
 		} catch (IOException e) {
 			e.printStackTrace();
 			messageString = null;
 		}
 	    return messageString;
-	}
-	
-//	public String escutar(){
-//	String retorno = "0";
-//	try{
-//		ServerSocket servidor = new ServerSocket(2016);
-//
-//		Socket cliente = servidor.accept();
-//		System.out.println("Cliente conectado: " + cliente.getInetAddress().getHostAddress());
-//		InputStream entrada = cliente.getInputStream();		
-//		retorno = lexer(entrada);
-//		cliente.close();
-//
-//	}catch(Exception e) {
-//		System.out.println("Erro: " + e.getMessage());
-//	}
-//	return retorno;
-//}
-
+	}	
 }

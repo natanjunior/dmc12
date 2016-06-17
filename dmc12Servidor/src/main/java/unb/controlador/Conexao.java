@@ -10,10 +10,16 @@ import unb.Fachada;
 
 public class Conexao implements Runnable{
 	private Fachada fachada;
+	private ServerSocket servidor;
 	private Socket cliente;
 	
 	public Conexao(Fachada f) {
 		this.fachada = f;
+		try {
+			servidor = new ServerSocket(2016);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Conexao(Fachada f, Socket c) {
@@ -24,8 +30,6 @@ public class Conexao implements Runnable{
 	public void escutar(){
 		System.out.println("Escutando");
 		try{
-			ServerSocket servidor = new ServerSocket(2016);
-			
 			while(true) {
 				Socket cliente = servidor.accept();
 				
@@ -95,8 +99,25 @@ public class Conexao implements Runnable{
 		}
 	}
 
+//	public void fazerBackup(Agendamento a) {
 	public void fazerBackup() {
-		
+		int porta = 1000;
+		try{
+			cliente = new Socket("127.0.0.1",porta);
+			
+			OutputStream saida = cliente.getOutputStream();
+//			saida.write(payload.getBytes(Charset.forName("UTF-8")));
+			saida.flush();
+			
+			InputStream entrada = cliente.getInputStream();
+//			retorno = this.comando(payload, lexer(entrada));
+			
+			saida.close();
+			entrada.close();
+			cliente.close();
+		}catch(Exception e) {
+			System.out.println("Erro: " + e.getMessage());
+		}
 	}
 	
 //	public void enviarMsg(String payload){
