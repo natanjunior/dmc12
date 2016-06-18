@@ -5,11 +5,11 @@ public class Cliente {
 	private String nome;
 	private String chave;
 	private String endereco;
+	private int porta;
 	
-	public Cliente(String n, String c, String e) {
+	public Cliente(String n, String c, int porta) {
 		this.nome = n;
 		this.chave = c;
-		this.endereco = e;
 	}
 
 	public String getNome() {
@@ -27,5 +27,12 @@ public class Cliente {
 	public int getId(){
 		return id;
 	}
+	
+	public void setPorta(int p){
+		this.porta = p;
+	}
 
+	public int getPorta(){
+		return porta;
+	}
 }

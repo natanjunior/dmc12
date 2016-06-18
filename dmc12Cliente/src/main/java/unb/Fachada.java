@@ -35,18 +35,16 @@ public class Fachada {
 	}
 
 	public void init() {
-		tela.inicial();
-//		tela.principal();
 		Thread t = new Thread(socketServidor);
 		t.start();
 		porta = socketServidor.getPorta();
-		entrar("junior", "123");
-		agendar(" /Users/natan.junior/teste 18/06/2016 03:06:00");
+		tela.inicial();
+//		tela.principal();
 	}
 		
 	public void entrar(String nome, String senha) {
 		String chave = pegarHash(nome+senha);
-		int id = Integer.parseInt(socketCliente.enviarMsg("0 "+nome+" "+chave));
+		int id = Integer.parseInt(socketCliente.enviarMsg("0 "+nome+" "+chave+" "+porta));
 		if(id>0){
 			cliente.setNome(nome);
 			cliente.setId(id);
@@ -57,7 +55,7 @@ public class Fachada {
 	
 	public void cadastrar(String nome, String senha){
 		String chave = pegarHash(nome+senha);
-		int id = Integer.parseInt(socketCliente.enviarMsg("1 "+nome+" "+chave));
+		int id = Integer.parseInt(socketCliente.enviarMsg("1 "+nome+" "+chave+" "+porta));
 		if(id>0){
 			cliente.setNome(nome);
 			cliente.setId(id);

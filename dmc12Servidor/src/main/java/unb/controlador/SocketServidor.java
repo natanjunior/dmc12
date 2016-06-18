@@ -12,13 +12,11 @@ public class SocketServidor implements Runnable{
 	private Fachada fachada;
 	private ServerSocket servidor;
 	private Socket cliente;
-	private int porta;
-
+	
 	public SocketServidor(Fachada f) {
 		this.fachada = f;
 		try {
-			servidor = new ServerSocket(0);
-			this.porta = servidor.getLocalPort();
+			servidor = new ServerSocket(2016);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -29,26 +27,45 @@ public class SocketServidor implements Runnable{
 		this.cliente = c;
 	}
 	
+	public String comando(String endereco, String payload){
+		String[] comandos = payload.split(" ");
+		String retorno = null;
+		
+		switch(comandos[0]){
+		case "0":
+			if(comandos.length==4) //	fazer validação
+				retorno = Integer.toString(fachada.loginCliente(comandos[1], comandos[2], Integer.parseInt(comandos[3])));
+			break;
+		case "1":
+			if(comandos.length==4) //	fazer validação
+				retorno = Integer.toString(fachada.cadastrarCliente(comandos[1], comandos[2], Integer.parseInt(comandos[3])));		
+			break;
+		case "2":
+			if(comandos.length==5) //	fazer validação
+				retorno = Integer.toString(fachada.agendar(comandos[1], comandos[2], comandos[3], comandos[4]));		
+			break;
+		}
+		
+		return retorno;
+	}
+	
 	public String lexer(InputStream entrada){
 		byte[] messageByte = new byte[1000];
 	    String messageString = "";
 	    int bytesRead;
 		try {
 			bytesRead = entrada.read(messageByte);
-			messageString = new String(messageByte, 0, bytesRead);
+			messageString = new String(messageByte, 0, bytesRead);;
 		} catch (IOException e) {
 			e.printStackTrace();
 			messageString = null;
 		}
 	    return messageString;
 	}
-	
-	public int getPorta(){
-		return porta;
-	}
 
+	@Override
 	public void run() {
-		System.out.println("Escutando Cliente");
+		System.out.println("Escutando Servidor");
 		try{
 			while(true) {
 				Socket cliente = servidor.accept();
