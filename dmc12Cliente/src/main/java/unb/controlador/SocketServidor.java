@@ -9,13 +9,13 @@ import java.nio.charset.Charset;
 import unb.Fachada;
 
 public class SocketServidor implements Runnable{
-	private Fachada fachada;
+	private Conexao conexao;
 	private ServerSocket servidor;
 	private Socket cliente;
 	private int porta;
 
-	public SocketServidor(Fachada f) {
-		this.fachada = f;
+	public SocketServidor(Conexao c) {
+		this.conexao = c;
 		try {
 			servidor = new ServerSocket(0);
 			this.porta = servidor.getLocalPort();
@@ -24,11 +24,11 @@ public class SocketServidor implements Runnable{
 		}
 	}
 	
-	public SocketServidor(Fachada f, Socket c) {
-		this.fachada = f;
+	public SocketServidor(Conexao cn, Socket c) {
+		this.conexao = cn;
 		this.cliente = c;
 	}
-	
+		
 	public String lexer(InputStream entrada){
 		byte[] messageByte = new byte[1000];
 	    String messageString = "";
@@ -46,18 +46,26 @@ public class SocketServidor implements Runnable{
 	public int getPorta(){
 		return porta;
 	}
+	
+	public String comando(String endereco, String payload){
+		String[] comandos = payload.split(" ");
+		String retorno = null;
+				
+		return retorno;
+	}
 
 	public void run() {
-		System.out.println("Escutando Cliente");
 		try{
-			while(true) {
-				Socket cliente = servidor.accept();
-				
-				SocketServidor tratamento = new SocketServidor(fachada, cliente);
-				Thread t = new Thread(tratamento);
-				t.start();
-			}
+			InputStream entrada = this.cliente.getInputStream();
+			String payload = this.comando(cliente.getInetAddress().getHostAddress(), lexer(entrada));
+		    
+			OutputStream saida = cliente.getOutputStream();
+			saida.write(payload.getBytes(Charset.forName("UTF-8")));
+			saida.flush();
+			saida.close();
 			
+			entrada.close();
+			cliente.close();
 		}catch(Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 		}

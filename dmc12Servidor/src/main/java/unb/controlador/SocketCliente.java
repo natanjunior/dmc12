@@ -9,11 +9,11 @@ import java.nio.charset.Charset;
 import unb.Fachada;
 
 public class SocketCliente implements Runnable{
-	private Fachada fachada;
+	private Conexao conexao;
 	private Socket cliente;
 	
-	public SocketCliente(Fachada f) {
-		this.fachada = f;
+	public SocketCliente(Conexao c) {
+		this.conexao = c;
 	}
 		
 	public String lexer(InputStream entrada){

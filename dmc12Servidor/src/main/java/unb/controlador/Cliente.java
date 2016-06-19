@@ -7,7 +7,7 @@ public class Cliente {
 	private String endereco;
 	private int porta;
 	
-	public Cliente(String n, String c, int porta) {
+	public Cliente(String n, String c) {
 		this.nome = n;
 		this.chave = c;
 	}
@@ -34,5 +34,10 @@ public class Cliente {
 
 	public int getPorta(){
 		return porta;
+	}
+
+	public void setEndereco(String e, int p) {
+		this.endereco = e;
+		this.porta = p;
 	}
 }

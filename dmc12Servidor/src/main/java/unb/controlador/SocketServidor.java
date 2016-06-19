@@ -9,40 +9,34 @@ import java.nio.charset.Charset;
 import unb.Fachada;
 
 public class SocketServidor implements Runnable{
-	private Fachada fachada;
-	private ServerSocket servidor;
+	private Conexao conexao;
 	private Socket cliente;
 	
-	public SocketServidor(Fachada f) {
-		this.fachada = f;
-		try {
-			servidor = new ServerSocket(2016);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public SocketServidor(Conexao c) {
+		this.conexao = c;
 	}
 	
-	public SocketServidor(Fachada f, Socket c) {
-		this.fachada = f;
+	public SocketServidor(Conexao cn, Socket c) {
+		this.conexao = cn;
 		this.cliente = c;
 	}
 	
-	public String comando(String endereco, String payload){
+	public String comando(String payload){
 		String[] comandos = payload.split(" ");
 		String retorno = null;
-		
+		System.out.println(comandos.length);
 		switch(comandos[0]){
 		case "0":
-			if(comandos.length==4) //	fazer validação
-				retorno = Integer.toString(fachada.loginCliente(comandos[1], comandos[2], Integer.parseInt(comandos[3])));
+			if(comandos.length==5) //	fazer validação
+				retorno = Integer.toString(conexao.loginCliente(comandos[1], comandos[2], comandos[4], Integer.parseInt(comandos[3])));
 			break;
 		case "1":
-			if(comandos.length==4) //	fazer validação
-				retorno = Integer.toString(fachada.cadastrarCliente(comandos[1], comandos[2], Integer.parseInt(comandos[3])));		
+			if(comandos.length==5) //	fazer validação
+				retorno = Integer.toString(conexao.cadastrarCliente(comandos[1], comandos[2], comandos[4], Integer.parseInt(comandos[3])));		
 			break;
 		case "2":
 			if(comandos.length==5) //	fazer validação
-				retorno = Integer.toString(fachada.agendar(comandos[1], comandos[2], comandos[3], comandos[4]));		
+				retorno = Integer.toString(conexao.agendar(comandos[1], comandos[2], comandos[3], comandos[4]));		
 			break;
 		}
 		
@@ -65,16 +59,20 @@ public class SocketServidor implements Runnable{
 
 	@Override
 	public void run() {
-		System.out.println("Escutando Servidor");
 		try{
-			while(true) {
-				Socket cliente = servidor.accept();
-				
-				SocketServidor tratamento = new SocketServidor(fachada, cliente);
-				Thread t = new Thread(tratamento);
-				t.start();
-			}
+			System.out.println("Cliente conectado: " + this.cliente.getInetAddress().getHostAddress() + 
+					" Porta: " + this.cliente.getPort());
+			InputStream entrada = this.cliente.getInputStream();
+			String entradaTraduzida = lexer(entrada);
+			String payload = comando(entradaTraduzida+" "+this.cliente.getInetAddress().getHostAddress());
+		    System.out.println("payload " + payload);
+			OutputStream saida = cliente.getOutputStream();
+			saida.write(payload.getBytes(Charset.forName("UTF-8")));
+			saida.flush();
+			saida.close();
 			
+			entrada.close();
+			cliente.close();
 		}catch(Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 		}

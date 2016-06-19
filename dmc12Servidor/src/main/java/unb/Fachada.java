@@ -9,8 +9,7 @@ import unb.tela.Tela;
 
 public class Fachada {
 	private static Fachada instancia;
-	private SocketServidor socketServidor;
-	private SocketCliente socketCliente;
+	private Conexao conexao;
 	private Banco banco;
 	private Tela tela;
 	
@@ -22,8 +21,7 @@ public class Fachada {
 	}
 	
 	private Fachada(){
-		socketCliente = new SocketCliente(this);
-		socketServidor = new SocketServidor(this);
+		conexao = new Conexao(this);
 		banco = new Banco(this);
 		tela = new Tela(this);
 	}
@@ -31,25 +29,26 @@ public class Fachada {
 	public void init() {
 		banco.carregaUsuarios();
 		banco.carregaAgendamentos();
-		Thread t = new Thread(socketServidor);
+		Thread t = new Thread(conexao);
 		t.start();
 		tela.inicial();
 //		conexao.fazerBackup();
 	}
 
-	public int cadastrarCliente(String nome, String chave, int porta) {
-		Cliente c = new Cliente(nome, chave, porta);
+	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {
+		Cliente c = new Cliente(nome, chave);
+		c.setEndereco(endereco, porta);
 		int id = banco.addCliente(c);
 		return id;
 	}
 	
-	public int loginCliente(String nome, String chave, int porta) {
+	public int loginCliente(String nome, String chave, String endereco, int porta) {
 		Cliente c = banco.buscaCliente(nome);
 		int id=-1;
 		if(c!=null){
 			if(c.getChave().equals(chave)){
 				id = c.getId();
-				c.setPorta(porta);
+				c.setEndereco(endereco, porta);
 			}
 		}
 		return id;

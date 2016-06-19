@@ -9,12 +9,12 @@ import java.nio.charset.Charset;
 import unb.Fachada;
 
 public class SocketCliente{
-	private Fachada fachada;
+	private Conexao conexao;
 	private Socket cliente;
 	private int porta;
 
-	public SocketCliente(Fachada f) {
-		this.fachada = f;
+	public SocketCliente(Conexao c) {
+		this.conexao = c;
 	}
 
 	public String enviarMsg(String payload){
@@ -26,6 +26,7 @@ public class SocketCliente{
 			saida.flush();
 			
 			InputStream entrada = cliente.getInputStream();
+			System.out.println(payload);
 			retorno = this.comando(payload, lexer(entrada));
 			
 			saida.close();
