@@ -27,4 +27,12 @@ public class Agendamento {
 	public String getArquivo(){
 		return arquivo;
 	}
+
+	public String getData() {
+		return data + " " + hora;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
 }

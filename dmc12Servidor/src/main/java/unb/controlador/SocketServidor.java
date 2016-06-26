@@ -35,7 +35,7 @@ public class SocketServidor implements Runnable{
 				retorno = Integer.toString(conexao.cadastrarCliente(comandos[1], comandos[2], comandos[4], Integer.parseInt(comandos[3])));		
 			break;
 		case "2":
-			if(comandos.length==5) //	fazer validação
+			if(comandos.length==6) //	fazer validação
 				retorno = Integer.toString(conexao.agendar(comandos[1], comandos[2], comandos[3], comandos[4]));		
 			break;
 		}
@@ -49,7 +49,7 @@ public class SocketServidor implements Runnable{
 	    int bytesRead;
 		try {
 			bytesRead = entrada.read(messageByte);
-			messageString = new String(messageByte, 0, bytesRead);;
+			messageString = new String(messageByte, 0, bytesRead);
 		} catch (IOException e) {
 			e.printStackTrace();
 			messageString = null;
@@ -73,6 +73,7 @@ public class SocketServidor implements Runnable{
 			
 			entrada.close();
 			cliente.close();
+			conexao.atualizar();
 		}catch(Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 		}

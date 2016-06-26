@@ -21,13 +21,16 @@ public class Backup {
 		this.fachada = f;
 	}
 	
-	public void comprimir(String diretorio){
+	public File comprimir(String diretorio, String id){
+		File retorno = null;
 		try {
 			comprimirTar(diretorio);
-			comprimirGzip("../../diretorio.tar");
+			comprimirGzip(diretorio+".tar");
+			retorno = excluirTar(diretorio+".tar", id);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return retorno;
 	}
 	
 	private void comprimirTar(String diretorio) throws IOException{
@@ -36,7 +39,7 @@ public class Backup {
         TarArchiveOutputStream tOut = null;
  
         try {
-            fOut = new FileOutputStream(new File("../../diretorio.tar"));
+            fOut = new FileOutputStream(new File(diretorio+".tar"));
             bOut = new BufferedOutputStream(fOut);
             tOut = new TarArchiveOutputStream(bOut);
             addFileToTar(tOut, diretorio, "");
@@ -97,6 +100,11 @@ public class Backup {
         } catch (IOException e) {
             e.printStackTrace();
         }
+	}
+	
+	private File excluirTar(String arquivo, String id){
+		(new File(arquivo)).delete();
+		return (new File(arquivo+".gz"));
 	}
 
 }

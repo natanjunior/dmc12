@@ -26,7 +26,6 @@ public class SocketCliente{
 			saida.flush();
 			
 			InputStream entrada = cliente.getInputStream();
-			System.out.println(payload);
 			retorno = this.comando(payload, lexer(entrada));
 			
 			saida.close();
@@ -42,7 +41,7 @@ public class SocketCliente{
 		String[] comandos = payload.split(" ");
 		String retorno = null;
 		
-		System.out.println("retorno " + feedback);
+//		System.out.println("retorno " + feedback);
 		
 		switch(comandos[0]){
 		case "0":

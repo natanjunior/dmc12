@@ -40,4 +40,8 @@ public class Cliente {
 		this.endereco = e;
 		this.porta = p;
 	}
+
+	public String getEndereco() {
+		return endereco;
+	}
 }

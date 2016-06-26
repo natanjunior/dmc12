@@ -35,7 +35,6 @@ public class Tela extends JFrame {
 	}
 
 	public void principal() {
-		System.out.println("das");
 		this.getContentPane().removeAll();
 		this.getContentPane().add(principal);
 		this.revalidate();

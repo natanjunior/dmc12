@@ -26,4 +26,8 @@ public class Tela extends JFrame {
 		this.add(principal);
 		this.setVisible(true);
 	}
+
+	public void atualizar() {
+		principal.atualizar();
+	}
 }

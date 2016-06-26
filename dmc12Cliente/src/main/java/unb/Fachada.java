@@ -2,6 +2,7 @@
 
 package unb;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.*;
 import java.net.Socket;
@@ -38,6 +39,7 @@ public class Fachada {
 		t.start();
 		tela.inicial();
 		entrar("junior", "123");
+//		agendar(" /Users/natan.junior/teste 24/06/2016 16:17:10");
 //		tela.principal();
 	}
 		
@@ -84,8 +86,8 @@ public class Fachada {
 		return cliente.getNome();
 	}
 	
-	public void comprimir(String diretorio){
-		backup.comprimir(diretorio);
+	public File buscarArquivo(String diretorio) {
+		return backup.comprimir(diretorio, Integer.toString(cliente.getId()));
 	}
 
 }

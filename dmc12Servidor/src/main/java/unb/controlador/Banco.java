@@ -18,6 +18,7 @@ public class Banco {
 	private Fachada fachada;
 	private RepositorioClientes rpClientes;
 	private RepositorioAgendamentos rpAgendamentos;
+	private RepositorioBackups rpBackups;
 	private File arqLog, arqClientes, arqAgendamentos;
 	private int newClienteId, newAgendamentoId;
 	private XStream xstream;
@@ -27,6 +28,7 @@ public class Banco {
 
 		this.rpClientes = new RepositorioClientes(this);
 		this.rpAgendamentos = new RepositorioAgendamentos(this);
+		this.rpBackups = new RepositorioBackups(this);
 		this.xstream = new XStream(new DomDriver());
 	}
 
@@ -77,7 +79,10 @@ public class Banco {
 						for(int i=1;i<=12;i++){
 							linha += leitor.readLine();
 						}
-						rpAgendamentos.add(lerAgendamentoXML(linha));
+						Agendamento a = lerAgendamentoXML(linha);
+						rpAgendamentos.add(a);
+						Backup b = new Backup(a, fachada);
+						addBackup(b);
 					}else{
 						break;
 					}
@@ -155,6 +160,14 @@ public class Banco {
 
 	public ArrayList<Agendamento> getAgendamentos() {
 		return rpAgendamentos.getAgendamentos();
+	}
+
+	public void addBackup(Backup b) {
+		rpBackups.add(b);
+	}
+
+	public ArrayList<Backup> getBackups() {
+		return rpBackups.getBackups();
 	}
 
 }

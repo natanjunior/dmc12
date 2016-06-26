@@ -1,3 +1,5 @@
+// CONEXAO SERVIDOR
+
 package unb.controlador;
 
 import java.io.IOException;
@@ -35,10 +37,10 @@ public class Conexao implements Runnable{
 	public int agendar(String idCliente, String arquivo, String data, String hora) {
 		return fachada.agendar(idCliente, arquivo, data, hora);
 	}
-
+	
 	@Override
 	public void run() {
-		System.out.println("Escutando Servidor");
+		System.out.println("SERVIDOR - escutando...");
 		try{
 			while(true) {
 				Socket cliente = servidor.accept();
@@ -50,5 +52,13 @@ public class Conexao implements Runnable{
 		}catch(Exception e) {
 			System.out.println("Conexao servidor - Erro: " + e.getMessage());
 		}
+	}
+
+	public void atualizar() {
+		fachada.atualizar();
+	}
+
+	public void enviarMsg(Cliente c, String payload) {
+		sktCliente.enviarMsg(c, payload);
 	}
 }

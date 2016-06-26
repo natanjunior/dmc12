@@ -1,5 +1,8 @@
+// CONEXAO CLIENTE
+
 package unb.controlador;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,7 +21,12 @@ public class Conexao implements Runnable{
 		this.fachada = f;
 		sktCliente = new SocketCliente(this);
 		sktServidor = new SocketServidor(this);
-		porta = sktServidor.getPorta();
+		try {
+			servidor = new ServerSocket(0);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		porta = servidor.getLocalPort();
 	}
 	
 	public int getPorta(){
@@ -27,7 +35,7 @@ public class Conexao implements Runnable{
 	
 	@Override
 	public void run() {
-		System.out.println("Escutando Cliente");
+		System.out.println("CLIENTE - escutando na porta "+porta);
 		try{
 			while(true) {
 				Socket cliente = servidor.accept();
@@ -43,5 +51,9 @@ public class Conexao implements Runnable{
 
 	public String enviarMsg(String payload) {
 		return sktCliente.enviarMsg(payload);
+	}
+
+	public File buscarArquivo(String diretorio) {
+		return fachada.buscarArquivo(diretorio);
 	}
 }

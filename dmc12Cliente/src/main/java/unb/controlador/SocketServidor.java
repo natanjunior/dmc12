@@ -1,5 +1,8 @@
 package unb.controlador;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -47,20 +50,20 @@ public class SocketServidor implements Runnable{
 		return porta;
 	}
 	
-	public String comando(String endereco, String payload){
-		String[] comandos = payload.split(" ");
-		String retorno = null;
-				
-		return retorno;
-	}
-
 	public void run() {
 		try{
+			System.out.println("Servidor conectado...");
 			InputStream entrada = this.cliente.getInputStream();
-			String payload = this.comando(cliente.getInetAddress().getHostAddress(), lexer(entrada));
-		    
+			String entradaTraduzida = lexer(entrada);
+//			String payload = comando(entradaTraduzida);
+
+			File arq = conexao.buscarArquivo(entradaTraduzida);
+			byte [] mybytearray  = new byte [(int)arq.length()];
+			FileInputStream fis = new FileInputStream(arq);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			bis.read(mybytearray,0,mybytearray.length);
 			OutputStream saida = cliente.getOutputStream();
-			saida.write(payload.getBytes(Charset.forName("UTF-8")));
+			saida.write(mybytearray,0,mybytearray.length);
 			saida.flush();
 			saida.close();
 			
@@ -70,4 +73,18 @@ public class SocketServidor implements Runnable{
 			System.out.println("Erro: " + e.getMessage());
 		}
 	}
+	
+//	public String comando(String payload){
+//		String[] comandos = payload.split(" ");
+//		String retorno = null;
+//		switch(comandos[0]){
+//		case "a":
+//			if(comandos.length==2){
+//				File arq = conexao.buscarArquivo(comandos[1]);
+//			}
+//			break;
+//		}
+//		
+//		return retorno;
+//	}
 }
