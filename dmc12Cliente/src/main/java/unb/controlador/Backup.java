@@ -25,8 +25,8 @@ public class Backup {
 		File retorno = null;
 		try {
 			comprimirTar(diretorio);
-			comprimirGzip(diretorio+".tar");
-			retorno = excluirTar(diretorio+".tar", id);
+//			comprimirGzip(diretorio+".tar");
+//			retorno = excluirTar(diretorio+".tar", id);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,26 +58,21 @@ public class Backup {
         File arq = new File(caminho);
         String entradaNome = base + arq.getName();
         TarArchiveEntry tarEntrada = new TarArchiveEntry(arq, entradaNome);
- 
+        
         tOut.putArchiveEntry(tarEntrada);
  
         if (arq.isFile()) {
             FileInputStream fInputStream = null;
-            try {
-                fInputStream = new FileInputStream(arq);
-                IOUtils.copy(fInputStream, tOut);
-                tOut.closeArchiveEntry();
-            } finally {
-                IOUtils.closeQuietly(fInputStream);
-            }
- 
+            fInputStream = new FileInputStream(arq);
+            IOUtils.copy(fInputStream, tOut);
+            tOut.closeArchiveEntry();
         } else {
             tOut.closeArchiveEntry();
             File[] filhos = arq.listFiles();
  
             if (filhos != null) {
                 for (File filho : filhos) {
-                	addFileToTar(tOut, filho.getAbsolutePath(), tarEntrada + "/");
+                	addFileToTar(tOut, filho.getAbsolutePath(), entradaNome + "/");
                 }
             }
         }
@@ -93,7 +88,6 @@ public class Backup {
             while((len=fis.read(buffer)) != -1){
                 gzipOS.write(buffer, 0, len);
             }
-            //close resources
             gzipOS.close();
             fos.close();
             fis.close();

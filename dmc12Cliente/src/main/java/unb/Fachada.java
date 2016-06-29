@@ -38,9 +38,10 @@ public class Fachada {
 		Thread t = new Thread(conexao);
 		t.start();
 		tela.inicial();
-		entrar("junior", "123");
+//		entrar("junior", "123");
 //		agendar(" /Users/natan.junior/teste 24/06/2016 16:17:10");
 //		tela.principal();
+		buscarArquivo("/Users/natan.junior/teste");
 	}
 		
 	public void entrar(String nome, String senha) {
