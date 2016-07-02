@@ -118,9 +118,10 @@ public class Fachada {
 	public void buscarArquivo(Agendamento agendamento) {
 		Cliente c = banco.buscaCliente(agendamento.getCliente().getId());	// trocar
 		conexao.enviarMsg(c, agendamento);
+		agendamento.setEstado(1);
 		String log = conexao.enviarMsg(c, "b "+agendamento.getArquivo());
 		if(log.equals(getHMAC(c.getId(), agendamento.getId()))){
-			
+			agendamento.setEstado(2);
 		}
 	}
 	

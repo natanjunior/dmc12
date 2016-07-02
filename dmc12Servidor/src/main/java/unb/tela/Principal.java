@@ -60,6 +60,7 @@ public class Principal extends JPanel{
 		mdlUsuario.setNumRows(0);
 		for (Cliente c : fachada.getClientes()) {
 			mdlUsuario.addRow(new Object[]{c.getId(), c.getNome(), c.getEndereco(), c.getPorta()});
+			System.out.println(c.getPorta());
 		}
 		
 		mdlAgendamento = new DefaultTableModel();
@@ -75,7 +76,18 @@ public class Principal extends JPanel{
 	}
 
 	public void atualizar() {
-		System.out.println("atualizado");
+		usuariosPanel.remove(tbUsuarios);
+		agendamentosPanel.remove(tbAgendamentos);
+		
+		criarTabelas();
+		
+		usuariosPanel.add(tbUsuarios);
+		agendamentosPanel.add(tbAgendamentos);
+		
+		this.add(usuariosPanel);
+		this.add(agendamentosPanel);
+		
+		this.validate();
 	}
 
 }

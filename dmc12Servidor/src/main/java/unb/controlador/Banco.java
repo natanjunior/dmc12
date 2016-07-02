@@ -80,7 +80,7 @@ public class Banco {
 				while(true){
 					String linha = leitor.readLine();
 					if(linha!=null){
-						for(int i=1;i<=12;i++){
+						for(int i=1;i<=13;i++){
 							linha += leitor.readLine();
 						}
 						Agendamento a = lerAgendamentoXML(linha);
@@ -173,6 +173,10 @@ public class Banco {
 
 	public ArrayList<Backup> getBackups() {
 		return rpBackups.getBackups();
+	}
+
+	public void alterar(Agendamento agendamento) {
+		
 	}
 
 }
