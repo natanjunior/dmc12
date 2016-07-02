@@ -1,23 +1,28 @@
 package unb.model;
 
 import java.util.ArrayList;
+
+import com.thoughtworks.xstream.annotations.*;
+
 import unb.controlador.*;
 
+@XStreamAlias("AGENDAMENTOS")
 public class RepositorioAgendamentos {
+	@XStreamImplicit(itemFieldName = "agendamento")
 	private ArrayList<Agendamento> agendamentos;
+	
+	@XStreamOmitField
 	private Banco banco;
 
-	public RepositorioAgendamentos(Banco b) {
-		this.banco = b;
+	public RepositorioAgendamentos() {
 		this.agendamentos = new ArrayList<Agendamento>();
 	}
 
-	public int add(Agendamento a) {
+	public int add(Agendamento a, int id) {
 		if(!agendamentos.contains(a)){
-			int newid = banco.newAgendamentoId();
-			a.setId(newid);
+			a.setId(id);
 			agendamentos.add(a);
-			return newid;
+			return id;
 		}else{
 			return -1;
 		}
@@ -25,5 +30,9 @@ public class RepositorioAgendamentos {
 
 	public ArrayList<Agendamento> getAgendamentos() {
 		return agendamentos;
+	}
+
+	public int size() {
+		return agendamentos.size();
 	}
 }

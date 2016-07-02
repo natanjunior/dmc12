@@ -20,7 +20,7 @@ public class Banco {
 	private RepositorioAgendamentos rpAgendamentos;
 	private RepositorioBackups rpBackups;
 	private File arqLog, arqClientes, arqAgendamentos;
-	private int newClienteId, newAgendamentoId;
+	private int newClienteId, newAgendamentoId = 1;
 	private XStream xstream;
 	private String pastaHome;
 
@@ -28,9 +28,10 @@ public class Banco {
 		this.fachada = f;
 
 		this.rpClientes = new RepositorioClientes(this);
-		this.rpAgendamentos = new RepositorioAgendamentos(this);
+		this.rpAgendamentos = new RepositorioAgendamentos();
 		this.rpBackups = new RepositorioBackups(this);
 		this.xstream = new XStream(new DomDriver());
+		xstream.processAnnotations(RepositorioAgendamentos.class);
 		
 		pastaHome = System.getProperty("user.home")+"/dmc/";
 		new File(pastaHome).mkdir();
@@ -76,21 +77,13 @@ public class Banco {
 			}
 		}else{
 			try {
-				BufferedReader leitor = new BufferedReader(new FileReader(arqAgendamentos));
-				while(true){
-					String linha = leitor.readLine();
-					if(linha!=null){
-						for(int i=1;i<=13;i++){
-							linha += leitor.readLine();
-						}
-						Agendamento a = lerAgendamentoXML(linha);
-						rpAgendamentos.add(a);
-						Backup b = new Backup(a, fachada);
-						addBackup(b);
-					}else{
-						break;
-					}
+				FileReader reader = new FileReader(arqAgendamentos);
+				this.rpAgendamentos = (RepositorioAgendamentos) xstream.fromXML(reader);
+				for (Agendamento a : rpAgendamentos.getAgendamentos()) {
+					Backup b = new Backup(a, fachada);
+					addBackup(b);
 				}
+				this.newAgendamentoId += rpAgendamentos.size();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -129,6 +122,17 @@ public class Banco {
 			e.printStackTrace();
 		}
 	}
+	
+	public void escreverArq2(File arq, String txt){
+		FileWriter escritor;
+		try {
+			escritor = new FileWriter(arq);
+			escritor.write(txt);
+			escritor.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public Cliente lerClienteXML(String xml){
 		xstream.alias("cliente", Cliente.class);
@@ -149,12 +153,10 @@ public class Banco {
 	}
 
 	public int addAgendamento(Agendamento a) {
-		int id = rpAgendamentos.add(a);
+		int id = rpAgendamentos.add(a, newAgendamentoId++);
 		if(id>0){
-			xstream.alias("agendamento", Agendamento.class);
-			xstream.autodetectAnnotations(true);
-			String xml = xstream.toXML(a);
-			escreverArq(arqAgendamentos, xml);
+			String xml = xstream.toXML(rpAgendamentos);
+			escreverArq2(arqAgendamentos, xml);
 		}
 		return id;
 	}
@@ -175,8 +177,8 @@ public class Banco {
 		return rpBackups.getBackups();
 	}
 
-	public void alterar(Agendamento agendamento) {
-		
+	public void alterarAgendamentos() {
+		String xml = xstream.toXML(rpAgendamentos);
+		escreverArq2(arqAgendamentos, xml);
 	}
-
 }

@@ -120,9 +120,11 @@ public class Fachada {
 		conexao.enviarMsg(c, agendamento);
 		agendamento.setEstado(1);
 		String log = conexao.enviarMsg(c, "b "+agendamento.getArquivo());
-		if(log.equals(getHMAC(c.getId(), agendamento.getId()))){
+		String entradas[] = log.split(" ");
+		if(entradas[4].equals(getHMAC(c.getId(), agendamento.getId()))){
 			agendamento.setEstado(2);
 		}
+		banco.alterarAgendamentos();
 	}
 	
 	public String getHMAC(int c, int a){
