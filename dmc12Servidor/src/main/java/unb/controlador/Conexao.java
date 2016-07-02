@@ -58,7 +58,11 @@ public class Conexao implements Runnable{
 		fachada.atualizar();
 	}
 
-	public void enviarMsg(Cliente c, String payload) {
-		sktCliente.enviarMsg(c, payload);
+	public String enviarMsg(Cliente c, String payload) {
+		return sktCliente.enviarMsg(c, payload);
+	}
+	
+	public void enviarMsg(Cliente c, Agendamento a) {
+		sktCliente.enviarMsg(c, a);
 	}
 }

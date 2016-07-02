@@ -2,8 +2,19 @@
 
 package unb;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Timer;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
 import unb.controlador.*;
 import unb.tela.Tela;
 
@@ -35,7 +46,6 @@ public class Fachada {
 		t.start();
 		tela.inicial();
 		setarBackups();
-//		fazerBackup();
 	}
 
 	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {
@@ -107,7 +117,43 @@ public class Fachada {
 
 	public void buscarArquivo(Agendamento agendamento) {
 		Cliente c = banco.buscaCliente(agendamento.getCliente().getId());	// trocar
-		conexao.enviarMsg(c, agendamento.getArquivo());
+		conexao.enviarMsg(c, agendamento);
+		String log = conexao.enviarMsg(c, "b "+agendamento.getArquivo());
+		if(log.equals(getHMAC(c.getId(), agendamento.getId()))){
+			
+		}
+	}
+	
+	public String getHMAC(int c, int a){
+		SecretKeySpec key = new SecretKeySpec(BigInteger.valueOf(c).toByteArray(), "HmacMD5");
+        Mac mac;
+        byte[] bytes;
+        String sEncodedString = null;
+		try {
+			mac = Mac.getInstance("HmacMD5");
+			mac.init(key);
+			
+			File arq = new File(System.getProperty("user.home")+"/dmc/"+c+"/"+a+".tar.gz");
+	        byte [] mybytearray  = new byte [(int)arq.length()];
+			FileInputStream fis = new FileInputStream(arq);
+			BufferedInputStream bis = new BufferedInputStream(fis);
+			bis.read(mybytearray,0,mybytearray.length);
+			
+			bytes = mac.doFinal(mybytearray);
+            StringBuffer hash = new StringBuffer();
+
+            for (int i=0; i<bytes.length; i++) {
+                String hex = Integer.toHexString(0xFF &  bytes[i]);
+                if (hex.length() == 1) {
+                    hash.append('0');
+                }
+                hash.append(hex);
+            }
+            sEncodedString = hash.toString();
+		} catch (NoSuchAlgorithmException | InvalidKeyException | IOException e) {
+			e.printStackTrace();
+		}
+        return sEncodedString;
 	}
 
 }

@@ -22,6 +22,7 @@ public class Banco {
 	private File arqLog, arqClientes, arqAgendamentos;
 	private int newClienteId, newAgendamentoId;
 	private XStream xstream;
+	private String pastaHome;
 
 	public Banco(Fachada f) {
 		this.fachada = f;
@@ -30,11 +31,14 @@ public class Banco {
 		this.rpAgendamentos = new RepositorioAgendamentos(this);
 		this.rpBackups = new RepositorioBackups(this);
 		this.xstream = new XStream(new DomDriver());
+		
+		pastaHome = System.getProperty("user.home")+"/dmc/";
+		new File(pastaHome).mkdir();
 	}
 
 	public void carregaUsuarios() {
 		this.newClienteId = 1313; // base dos id's
-		arqClientes = new File("clientes.xml");
+		arqClientes = new File(pastaHome+"clientes.xml");
 		if(!arqClientes.exists()){
 			try {
 				arqClientes.createNewFile();
@@ -63,7 +67,7 @@ public class Banco {
 	
 	public void carregaAgendamentos() {
 		this.newAgendamentoId = 1; // base dos id's
-		arqAgendamentos = new File("agendamentos.xml");
+		arqAgendamentos = new File(pastaHome+"agendamentos.xml");
 		if(!arqAgendamentos.exists()){
 			try {
 				arqAgendamentos.createNewFile();
@@ -99,6 +103,7 @@ public class Banco {
 			xstream.alias("cliente", Cliente.class);
 			String xml = xstream.toXML(c);
 			escreverArq(arqClientes, xml);
+			new File(pastaHome+id).mkdir();
 		}
 		return id;
 	}

@@ -18,16 +18,36 @@ public class SocketCliente implements Runnable {
 		this.conexao = c;
 	}
 
-	public void enviarMsg(Cliente c, String payload) {
+	public String enviarMsg(Cliente c, String payload) {
+		String retorno = null;
 		try {
 			cliente = new Socket(c.getEndereco(), c.getPorta());
 			OutputStream saida = cliente.getOutputStream();
 			saida.write(payload.getBytes(Charset.forName("UTF-8")));
 			saida.flush();
+			
+			InputStream entrada = this.cliente.getInputStream();
+			retorno = lexer(entrada);
+			
+			saida.close();
+			cliente.close();
+		} catch (Exception e) {
+			System.out.println("Erro: " + e.getMessage());
+		}
+		return retorno;
+	}
+	
+	public void enviarMsg(Cliente c, Agendamento a) {
+		try {
+			cliente = new Socket(c.getEndereco(), c.getPorta());
+			OutputStream saida = cliente.getOutputStream();
+			String payload = "a "+a.getArquivo();
+			saida.write(payload.getBytes(Charset.forName("UTF-8")));
+			saida.flush();
 
 			byte[] mybytearray = new byte[6022386];
 			InputStream entrada = cliente.getInputStream();
-			FileOutputStream fos = new FileOutputStream("teste.tar.gz");
+			FileOutputStream fos = new FileOutputStream(System.getProperty("user.home")+"/dmc/"+c.getId()+"/"+a.getId()+".tar.gz");
 			BufferedOutputStream bos = new BufferedOutputStream(fos);
 			int bytesRead = entrada.read(mybytearray, 0, mybytearray.length);
 			int current = bytesRead;
@@ -38,7 +58,7 @@ public class SocketCliente implements Runnable {
 			} while (bytesRead > -1);
 			bos.write(mybytearray, 0, current);
 			bos.close();
-
+			
 			saida.close();
 			cliente.close();
 		} catch (Exception e) {

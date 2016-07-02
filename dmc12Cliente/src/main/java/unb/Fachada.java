@@ -38,10 +38,8 @@ public class Fachada {
 		Thread t = new Thread(conexao);
 		t.start();
 		tela.inicial();
-//		entrar("junior", "123");
-//		agendar(" /Users/natan.junior/teste 24/06/2016 16:17:10");
-//		tela.principal();
-		buscarArquivo("/Users/natan.junior/teste");
+		entrar("natan", "123");
+//		agendar(" /Users/natan.junior/teste 01/07/2016 10:40:10");
 	}
 		
 	public void entrar(String nome, String senha) {
@@ -91,4 +89,7 @@ public class Fachada {
 		return backup.comprimir(diretorio, Integer.toString(cliente.getId()));
 	}
 
+	public int getId() {
+		return cliente.getId();
+	}
 }

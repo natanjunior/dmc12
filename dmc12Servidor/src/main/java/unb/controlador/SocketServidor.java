@@ -6,8 +6,6 @@ import java.io.OutputStream;
 import java.net.*;
 import java.nio.charset.Charset;
 
-import unb.Fachada;
-
 public class SocketServidor implements Runnable{
 	private Conexao conexao;
 	private Socket cliente;
@@ -24,7 +22,6 @@ public class SocketServidor implements Runnable{
 	public String comando(String payload){
 		String[] comandos = payload.split(" ");
 		String retorno = null;
-		System.out.println(comandos.length);
 		switch(comandos[0]){
 		case "0":
 			if(comandos.length==5) //	fazer validação
@@ -65,7 +62,6 @@ public class SocketServidor implements Runnable{
 			InputStream entrada = this.cliente.getInputStream();
 			String entradaTraduzida = lexer(entrada);
 			String payload = comando(entradaTraduzida+" "+this.cliente.getInetAddress().getHostAddress());
-		    System.out.println("payload " + payload);
 			OutputStream saida = cliente.getOutputStream();
 			saida.write(payload.getBytes(Charset.forName("UTF-8")));
 			saida.flush();

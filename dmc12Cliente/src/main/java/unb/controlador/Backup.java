@@ -25,8 +25,8 @@ public class Backup {
 		File retorno = null;
 		try {
 			comprimirTar(diretorio);
-//			comprimirGzip(diretorio+".tar");
-//			retorno = excluirTar(diretorio+".tar", id);
+			comprimirGzip(diretorio+".tar"); 
+			retorno = excluirTar(diretorio+".tar", id);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -44,7 +44,6 @@ public class Backup {
             tOut = new TarArchiveOutputStream(bOut);
             addFileToTar(tOut, diretorio, "");
         } catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
             tOut.finish();
