@@ -63,7 +63,9 @@ public class SocketServidor implements Runnable{
 				enviarArq = true;
 			break;
 		case "7":
-			retorno = conexao.editarAgendamento(comandos[1]);
+			System.out.println(payload);
+			if(comandos.length==5) //	fazer validação
+				retorno = conexao.editarAgendamento(comandos[1], comandos[2], comandos[3]);
 			break;
 		case "8":
 			retorno = conexao.buscarLog(System.getProperty("user.home")+"/dmc/"+comandos[1]);

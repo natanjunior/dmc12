@@ -43,4 +43,12 @@ public class Agendamento {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
+
+	public void setHora(String novaHora) {
+		this.hora = novaHora;
+	}
+
+	public void setData(String novaData) {
+		this.data = novaData;
+	}
 }

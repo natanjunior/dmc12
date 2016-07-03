@@ -127,7 +127,7 @@ public class Fachada {
 	}
 	
 	public void editarAgendamento(String msg) {
-		conexao.enviarMsg("7 "+cliente.getId()+msg);
+		conexao.enviarMsg("7 "+msg);
 	}
 	
 	public String getHMAC(int c, String end){

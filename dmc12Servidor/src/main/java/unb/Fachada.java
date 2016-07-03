@@ -76,11 +76,7 @@ public class Fachada {
 		setarBackup(b);
 		return id;
 	}
-	
-	public void fazerBackup(){
-	    
-	}
-	
+		
 	public ArrayList<Cliente> getClientes() {
 		return banco.getClientes();
 	}
@@ -169,31 +165,37 @@ public class Fachada {
 	}
 
 	public String excluirAgendamento(String id) {
-		Agendamento a = banco.getAgendamento(Integer.parseInt(id));
-		if(a==null)
+		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
+		if(agendamento==null)
 			return "-1";
-		if(a.getEstado()!=2)	// só por segurança
+		if(agendamento.getEstado()!=2)	// só por segurança
 			return "-2";
-		
-		return null;
+		agendamento.setEstado(-3);
+		String a = Integer.toString(agendamento.getId());
+		String c = Integer.toString(agendamento.getCliente().getId());
+		new File(System.getProperty("user.home")+"/dmc/"+c+"/"+a+".tar.gz").delete();	
+		banco.alterarAgendamentos();
+		return id;
 	}
 
 	public String cancelarAgendamento(String id) {
-		Agendamento a = banco.getAgendamento(Integer.parseInt(id));
-		if(a==null)
+		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
+		if(agendamento==null)
 			return "-1";
-		if(a.getEstado()==2)
+		if(agendamento.getEstado()==2)
 			return "-2";
-		a.setEstado(-1);
-		Backup b = banco.getBackup(a);
+		agendamento.setEstado(-1);
+		Backup b = banco.getBackup(agendamento);
 		b.setEstado(-1);
 		banco.removeBackup(b);
 		banco.alterarAgendamentos();
-		return Integer.toString(a.getId());
+		return id;
 	}
 
 	public String restaurarAgendamento(String id) {	// falta validação
 		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
+		if(agendamento.getEstado()==-3)
+			return "-3";
 		String a = Integer.toString(agendamento.getId());
 		String c = Integer.toString(agendamento.getCliente().getId());
 		String arq = System.getProperty("user.home")+"/dmc/"+c+"/"+a+".tar.gz";
@@ -205,6 +207,25 @@ public class Fachada {
 		if(!retorno.exists())
 			return null;
 		return retorno;
+	}
+
+	public String editarAgendamento(String id, String novaData, String novaHora) {
+		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
+		if(agendamento==null)
+			return "-1";
+		if(agendamento.getEstado()==0){
+			Backup b = banco.getBackup(agendamento);
+			b.setEstado(-1);
+			banco.removeBackup(b);
+		}
+		agendamento.setEstado(0);
+		agendamento.setHora(novaHora);
+		agendamento.setData(novaData);
+		Backup b = new Backup(agendamento, this);
+		banco.addBackup(b);
+		setarBackup(b);
+		banco.alterarAgendamentos();
+		return id;
 	}
 
 }

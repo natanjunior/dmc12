@@ -137,7 +137,7 @@ public class Principal extends JPanel{
 		df = new SimpleDateFormat("HH:mm:ss");
 		msg += " " + df.format(spinnerHora.getValue());
 		
-		if(true)
+		if(true)	// mudar aqui - fazer validacao
 			tela.agendar(msg);
 		
 	}
@@ -211,7 +211,11 @@ public class Principal extends JPanel{
 				act1Btn.setEnabled(false);
 				agendadosPanel.add(act1Btn,c);
 				act1Btn = new JButton("Reagendar");
-				act1Btn.setEnabled(false);
+				act1Btn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						reagendar(id);
+					}
+				});
 				c.gridx = 6;
 				agendadosPanel.add(act1Btn,c);
 			}
@@ -235,8 +239,22 @@ public class Principal extends JPanel{
 	}
 	
 	public void reagendar(String id) {
-		String msg = "";
-		tela.editarAgendamento(msg);
+		String msg = id;
+		boolean valido = true;
+		
+		Date selectedDate = (Date) datePicker.getModel().getValue();
+		if(selectedDate!=null){
+			df = new SimpleDateFormat("dd/MM/yyyy");
+			msg += " " + df.format(selectedDate);
+		}else{
+			valido = false;
+		}
+		
+		df = new SimpleDateFormat("HH:mm:ss");
+		msg += " " + df.format(spinnerHora.getValue());
+		
+		if(true)	// mudar aqui - fazer validacao
+			tela.editarAgendamento(msg);
 	}
 
 }

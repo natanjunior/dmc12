@@ -33,7 +33,7 @@ public class Backup extends TimerTask{
 	}
 
 	public void run() {
-		if(this.estado==0){
+		if(this.estado==1){
 			this.estado = 2;
 			fachada.buscarArquivo(agendamento);
 		}

@@ -62,7 +62,7 @@ public class Tela extends JFrame {
 	}
 	
 	public void editarAgendamento(String msg) {
-		fachada.cancelarAgendamento(msg);
+		fachada.editarAgendamento(msg);
 	}
 
 }

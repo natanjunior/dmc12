@@ -86,8 +86,8 @@ public class Conexao implements Runnable{
 		return fachada.restaurarAgendamento(id);
 	}
 
-	public String editarAgendamento(String string) {
-		return null;
+	public String editarAgendamento(String id, String novaData, String novaHora) {
+		return fachada.editarAgendamento(id, novaData, novaHora);
 	}
 	
 	public File buscarArquivo(String diretorio) {
