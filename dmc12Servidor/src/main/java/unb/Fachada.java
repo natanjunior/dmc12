@@ -159,4 +159,41 @@ public class Fachada {
         return sEncodedString;
 	}
 
+	public String listarAgendamento(int id) {
+		StringBuilder sb = new StringBuilder();
+		Cliente cliente = banco.buscaCliente(id);
+		for (Agendamento a : banco.getAgendamentos(cliente)) {
+			sb.append(a.getId()).append(" ").append(a.getArquivo()).append(" ").append(a.getData()).append(" ").append(a.getEstado()).append(" ");
+		}
+		return sb.toString();
+	}
+
+	public String excluirAgendamento(String id) {
+		Agendamento a = banco.getAgendamento(Integer.parseInt(id));
+		if(a==null)
+			return "-1";
+		if(a.getEstado()!=2)	// só por segurança
+			return "-2";
+		
+		return null;
+	}
+
+	public String cancelarAgendamento(String id) {
+		Agendamento a = banco.getAgendamento(Integer.parseInt(id));
+		if(a==null)
+			return "-1";
+		if(a.getEstado()==2)
+			return "-2";
+		a.setEstado(-1);
+		Backup b = banco.getBackup(a);
+		b.setEstado(-1);
+		banco.removeBackup(b);
+		banco.alterarAgendamentos();
+		return Integer.toString(a.getId());
+	}
+
+	public String restaurarAgendamento(String id) {
+		return null;
+	}
+
 }

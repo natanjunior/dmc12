@@ -1,6 +1,12 @@
 package unb.tela;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -24,9 +30,9 @@ import unb.helper.DateLabelFormatter;
 
 public class Principal extends JPanel{
 	private Tela tela;
-	private JPanel novoPanel, agendadosPanel, backupsPanel, configPanel;
-	private JLabel lbNovo;
-	private JButton selecArqBtn, agendarBtn;
+	private JPanel novoPanel, agendadosPanel, configPanel;
+	private JLabel lbNovo, lbAgendados, lbArq, lbData, lbHora, lbEstado, lbId;
+	private JButton selecArqBtn, agendarBtn, act1Btn;
 	private UtilDateModel modelData;
 	private JDatePanelImpl datePanel;
 	private JDatePickerImpl datePicker;
@@ -42,8 +48,7 @@ public class Principal extends JPanel{
 		super();
 		
 		this.tela = t;
-
-		this.setLayout(new FlowLayout());
+		this.setLayout(new BorderLayout());
 		
 		novoPanel = new JPanel();
 		
@@ -100,7 +105,15 @@ public class Principal extends JPanel{
 		novoPanel.add(selecArqBtn);
 		novoPanel.add(agendarBtn);
 		
-		this.add(novoPanel);
+		agendadosPanel = new JPanel();
+		agendadosPanel.setLayout(new BorderLayout());
+		
+		lbAgendados = new JLabel("Agendamentos");
+		
+		agendadosPanel.add(lbAgendados, BorderLayout.CENTER);
+		
+		this.add(novoPanel, BorderLayout.PAGE_START);
+		this.add(agendadosPanel, BorderLayout.CENTER);
 	}
 	
 	public void agendar(){
@@ -127,6 +140,102 @@ public class Principal extends JPanel{
 		if(true)
 			tela.agendar(msg);
 		
+	}
+
+	public void criarLista(String[] agendamentos) {
+		agendadosPanel.setLayout(new GridBagLayout());
+//		agendadosPanel.setBackground(new Color(107, 106, 104));
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 1;
+		c.weightx = 1;
+		c.gridwidth = 5;
+		agendadosPanel.add(lbAgendados,c);
+		c.gridwidth = 1;
+		for (int i = 0; i < agendamentos.length; i=i+5) {
+			c.gridy = 1+(i/5);
+			lbId = new JLabel(agendamentos[i]);
+			String id = agendamentos[i];
+			c.gridx = 0;
+			agendadosPanel.add(lbId,c);
+			lbArq = new JLabel(agendamentos[i+1]);
+			c.gridx = 1;
+			agendadosPanel.add(lbArq,c);
+			lbData = new JLabel(agendamentos[i+2]);
+			c.gridx = 2;
+			agendadosPanel.add(lbData,c);
+			lbHora = new JLabel(agendamentos[i+3]);
+			c.gridx = 3;
+			agendadosPanel.add(lbHora,c);
+			lbEstado = new JLabel(agendamentos[i+4]);
+			c.gridx = 4;
+			agendadosPanel.add(lbEstado,c);
+			c.gridx = 5;
+			if(agendamentos[i+4].equals("2")){
+				act1Btn = new JButton("Excluir");
+				act1Btn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						excluir(id);
+					}
+				});
+				agendadosPanel.add(act1Btn,c);
+				act1Btn = new JButton("Restaurar");
+				act1Btn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						restaurar(id);
+					}
+				});
+				c.gridx = 6;
+				agendadosPanel.add(act1Btn,c);
+			}else if((agendamentos[i+4].equals("0"))||(agendamentos[i+4].equals("1"))){
+				act1Btn = new JButton("Cancelar");
+				act1Btn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						cancelar(id);
+					}
+				});
+				agendadosPanel.add(act1Btn,c);
+				act1Btn = new JButton("Reagendar");
+				act1Btn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						reagendar(id);
+					}
+				});
+				c.gridx = 6;
+				agendadosPanel.add(act1Btn,c);
+			}else{
+				act1Btn = new JButton("Cancelar");
+				act1Btn.setEnabled(false);
+				agendadosPanel.add(act1Btn,c);
+				act1Btn = new JButton("Reagendar");
+				act1Btn.setEnabled(false);
+				c.gridx = 6;
+				agendadosPanel.add(act1Btn,c);
+			}
+		}
+	
+		this.add(agendadosPanel, BorderLayout.CENTER);
+		
+		this.validate();
+	}
+
+	public void excluir(String id) {
+		tela.excluirAgendamento(id);
+	}
+	
+	public void cancelar(String id) {
+		tela.cancelarAgendamento(id);
+	}
+	
+	public void restaurar(String id) {
+		tela.restaurarAgendamento(id);
+	}
+	
+	public void reagendar(String id) {
+		String msg = "";
+		tela.editarAgendamento(msg);
 	}
 
 }

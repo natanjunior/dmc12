@@ -10,9 +10,6 @@ import unb.controlador.*;
 public class RepositorioAgendamentos {
 	@XStreamImplicit(itemFieldName = "agendamento")
 	private ArrayList<Agendamento> agendamentos;
-	
-	@XStreamOmitField
-	private Banco banco;
 
 	public RepositorioAgendamentos() {
 		this.agendamentos = new ArrayList<Agendamento>();
@@ -31,8 +28,26 @@ public class RepositorioAgendamentos {
 	public ArrayList<Agendamento> getAgendamentos() {
 		return agendamentos;
 	}
+	
+	public ArrayList<Agendamento> getAgendamentos(Cliente c) {
+		ArrayList<Agendamento> retorno = new ArrayList<Agendamento>();
+		for (Agendamento a : agendamentos) {
+			if(a.getCliente().equals(c))
+				retorno.add(a);
+		}
+		return agendamentos;
+	}
 
 	public int size() {
 		return agendamentos.size();
+	}
+
+	public Agendamento getAgendamento(int id) {
+		Agendamento retorno = null;
+		for (Agendamento a : agendamentos) {
+			if(a.getId()==id)
+				retorno = a;
+		}
+		return retorno;
 	}
 }

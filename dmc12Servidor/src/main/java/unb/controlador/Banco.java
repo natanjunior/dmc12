@@ -80,8 +80,10 @@ public class Banco {
 				FileReader reader = new FileReader(arqAgendamentos);
 				this.rpAgendamentos = (RepositorioAgendamentos) xstream.fromXML(reader);
 				for (Agendamento a : rpAgendamentos.getAgendamentos()) {
-					Backup b = new Backup(a, fachada);
-					addBackup(b);
+					if(a.getEstado()==0){
+						Backup b = new Backup(a, fachada);
+						addBackup(b);
+					}
 				}
 				this.newAgendamentoId += rpAgendamentos.size();
 			} catch (IOException e) {
@@ -180,5 +182,21 @@ public class Banco {
 	public void alterarAgendamentos() {
 		String xml = xstream.toXML(rpAgendamentos);
 		escreverArq2(arqAgendamentos, xml);
+	}
+
+	public ArrayList<Agendamento> getAgendamentos(Cliente c) { // deveria ser "busca"
+		return rpAgendamentos.getAgendamentos(c);
+	}
+
+	public Agendamento getAgendamento(int id) { // deveria ser "busca"
+		return rpAgendamentos.getAgendamento(id);
+	}
+
+	public Backup getBackup(Agendamento a) {
+		return rpBackups.busca(a.getId());
+	}
+
+	public void removeBackup(Backup b) {
+		rpBackups.remove(b);
 	}
 }

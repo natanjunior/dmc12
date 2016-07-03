@@ -20,6 +20,7 @@ public class SocketServidor implements Runnable{
 	}
 	
 	public String comando(String payload){
+		System.out.println(payload);
 		String[] comandos = payload.split(" ");
 		String retorno = null;
 		switch(comandos[0]){
@@ -35,8 +36,22 @@ public class SocketServidor implements Runnable{
 			if(comandos.length==6) //	fazer validação
 				retorno = Integer.toString(conexao.agendar(comandos[1], comandos[2], comandos[3], comandos[4]));		
 			break;
+		case "3":
+			retorno = conexao.listar(comandos[1]);
+			break;
+		case "4":
+			retorno = conexao.excluirAgendamento(comandos[1]);
+			break;
+		case "5":
+			retorno = conexao.cancelarAgendamento(comandos[1]);
+			break;
+		case "6":
+			retorno = conexao.restaurarAgendamento(comandos[1]);
+			break;
+		case "7":
+			retorno = conexao.editarAgendamento(comandos[1]);
+			break;
 		}
-		
 		return retorno;
 	}
 	

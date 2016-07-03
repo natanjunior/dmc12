@@ -35,6 +35,11 @@ public class Tela extends JFrame {
 	}
 
 	public void principal() {
+		String[] agendamentos = fachada.listar();
+		if(agendamentos.length > 0){
+			principal.criarLista(agendamentos);
+		}
+		
 		this.getContentPane().removeAll();
 		this.getContentPane().add(principal);
 		this.revalidate();
@@ -42,6 +47,22 @@ public class Tela extends JFrame {
 
 	public void agendar(String msg) {
 		fachada.agendar(msg);
+	}
+
+	public void excluirAgendamento(String id) {
+		fachada.excluirAgendamento(id);
+	}
+	
+	public void cancelarAgendamento(String id) {
+		fachada.cancelarAgendamento(id);
+	}
+	
+	public void restaurarAgendamento(String id) {
+		fachada.restaurarAgendamento(id);
+	}
+	
+	public void editarAgendamento(String msg) {
+		fachada.restaurarAgendamento(msg);
 	}
 
 }

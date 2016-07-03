@@ -60,7 +60,6 @@ public class Principal extends JPanel{
 		mdlUsuario.setNumRows(0);
 		for (Cliente c : fachada.getClientes()) {
 			mdlUsuario.addRow(new Object[]{c.getId(), c.getNome(), c.getEndereco(), c.getPorta()});
-			System.out.println(c.getPorta());
 		}
 		
 		mdlAgendamento = new DefaultTableModel();

@@ -92,4 +92,27 @@ public class Fachada {
 	public int getId() {
 		return cliente.getId();
 	}
+
+	public String[] listar() {	// falta validação
+		String[] retorno = null;
+		String r = conexao.enviarMsg("3 "+cliente.getId());
+		retorno = r.split(" ");
+		return retorno;
+	}
+
+	public void excluirAgendamento(String id) {	// falta validação - mandar id
+		conexao.enviarMsg("4 "+id);
+	}
+	
+	public void cancelarAgendamento(String id) {	// falta validação - mandar id
+		conexao.enviarMsg("5 "+id);
+	}
+	
+	public void restaurarAgendamento(String id) {	// falta validação - mandar id
+		conexao.enviarMsg("6 "+id);
+	}
+	
+	public void editarAgendamento(String msg) {
+		conexao.enviarMsg("7 "+cliente.getId()+msg);
+	}
 }

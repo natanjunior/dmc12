@@ -27,4 +27,8 @@ public class RepositorioBackups {
 	public ArrayList<Backup> getBackups() {
 		return backups;
 	}
+	
+	public void remove(Backup b){
+		backups.remove(b);
+	}
 }

@@ -37,7 +37,7 @@ public class SocketCliente{
 		return retorno;
 	}
 	
-	public String comando(String payload, String feedback){
+	public String comando(String payload, String feedback){	// mudar isso
 		String[] comandos = payload.split(" ");
 		String retorno = null;
 		
@@ -48,6 +48,9 @@ public class SocketCliente{
 			retorno = feedback;
 			break;
 		case "1":
+			retorno = feedback;
+			break;
+		case "3":
 			retorno = feedback;
 			break;
 		}

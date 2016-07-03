@@ -65,4 +65,24 @@ public class Conexao implements Runnable{
 	public void enviarMsg(Cliente c, Agendamento a) {
 		sktCliente.enviarMsg(c, a);
 	}
+
+	public String listar(String cliente) {
+		return fachada.listarAgendamento(Integer.parseInt(cliente));
+	}
+
+	public String excluirAgendamento(String id) {
+		return fachada.excluirAgendamento(id);
+	}
+
+	public String cancelarAgendamento(String id) {
+		return fachada.cancelarAgendamento(id);
+	}
+
+	public String restaurarAgendamento(String id) {
+		return fachada.restaurarAgendamento(id);
+	}
+
+	public String editarAgendamento(String string) {
+		return null;
+	}
 }
