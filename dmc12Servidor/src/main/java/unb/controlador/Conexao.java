@@ -2,9 +2,11 @@
 
 package unb.controlador;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import unb.Fachada;
 
@@ -14,6 +16,7 @@ public class Conexao implements Runnable{
 	private SocketServidor sktServidor;
 	private ServerSocket servidor;
 	private Socket cliente;
+	private ArrayList<String[]> logs; // isto não é daqui!
 	
 	public Conexao(Fachada f) {
 		this.fachada = f;
@@ -24,6 +27,7 @@ public class Conexao implements Runnable{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.logs = new ArrayList<String[]>();
 	}
 	
 	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {
@@ -83,6 +87,22 @@ public class Conexao implements Runnable{
 	}
 
 	public String editarAgendamento(String string) {
+		return null;
+	}
+	
+	public File buscarArquivo(String diretorio) {
+		return fachada.buscarArquivo(diretorio);
+	}
+
+	public void salvarLog(String[] log) {
+		this.logs.add(log);
+	}
+
+	public String buscarLog(String log) {
+		for(String[] l : logs) {
+			if (l[0].equals(log))
+				return l[0]+" "+l[1]+" "+l[2]+" "+l[3]+" "+l[4];
+		}
 		return null;
 	}
 }

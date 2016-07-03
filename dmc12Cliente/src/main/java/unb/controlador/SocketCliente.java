@@ -1,5 +1,7 @@
 package unb.controlador;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,7 +39,7 @@ public class SocketCliente{
 		return retorno;
 	}
 	
-	public String comando(String payload, String feedback){	// mudar isso
+	public String comando(String payload, String feedback){	// mudar tudo isso
 		String[] comandos = payload.split(" ");
 		String retorno = null;
 		
@@ -51,6 +53,9 @@ public class SocketCliente{
 			retorno = feedback;
 			break;
 		case "3":
+			retorno = feedback;
+			break;
+		case "8":
 			retorno = feedback;
 			break;
 		}
@@ -70,5 +75,33 @@ public class SocketCliente{
 			messageString = null;
 		}
 	    return messageString;
+	}
+
+	public void restaurar(String payload, String endereco) {
+		try{
+			cliente = new Socket("127.0.0.1",2016);
+			OutputStream saida = cliente.getOutputStream();
+			saida.write(payload.getBytes(Charset.forName("UTF-8")));
+			saida.flush();
+			
+			byte[] mybytearray = new byte[6022386];
+			InputStream entrada = cliente.getInputStream();
+			FileOutputStream fos = new FileOutputStream(endereco+".tar.gz");
+			BufferedOutputStream bos = new BufferedOutputStream(fos);
+			int bytesRead = entrada.read(mybytearray, 0, mybytearray.length);
+			int current = bytesRead;
+			do {
+				bytesRead = entrada.read(mybytearray, current, (mybytearray.length - current));
+				if (bytesRead >= 0)
+					current += bytesRead;
+			} while (bytesRead > -1);
+			bos.write(mybytearray, 0, current);
+			bos.close();
+			
+			saida.close();
+			cliente.close();
+		}catch(Exception e) {
+			System.out.println("Erro: " + e.getMessage());
+		}
 	}	
 }

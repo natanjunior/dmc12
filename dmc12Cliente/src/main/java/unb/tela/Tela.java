@@ -57,12 +57,12 @@ public class Tela extends JFrame {
 		fachada.cancelarAgendamento(id);
 	}
 	
-	public void restaurarAgendamento(String id) {
-		fachada.restaurarAgendamento(id);
+	public void restaurarAgendamento(String id, String endereco) {
+		fachada.restaurarAgendamento(id, endereco);
 	}
 	
 	public void editarAgendamento(String msg) {
-		fachada.restaurarAgendamento(msg);
+		fachada.cancelarAgendamento(msg);
 	}
 
 }

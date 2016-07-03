@@ -161,6 +161,7 @@ public class Principal extends JPanel{
 			c.gridx = 0;
 			agendadosPanel.add(lbId,c);
 			lbArq = new JLabel(agendamentos[i+1]);
+			String end = agendamentos[i+1];
 			c.gridx = 1;
 			agendadosPanel.add(lbArq,c);
 			lbData = new JLabel(agendamentos[i+2]);
@@ -184,7 +185,7 @@ public class Principal extends JPanel{
 				act1Btn = new JButton("Restaurar");
 				act1Btn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						restaurar(id);
+						restaurar(id, end);
 					}
 				});
 				c.gridx = 6;
@@ -229,8 +230,8 @@ public class Principal extends JPanel{
 		tela.cancelarAgendamento(id);
 	}
 	
-	public void restaurar(String id) {
-		tela.restaurarAgendamento(id);
+	public void restaurar(String id, String endereco) {
+		tela.restaurarAgendamento(id, endereco);
 	}
 	
 	public void reagendar(String id) {

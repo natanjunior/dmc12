@@ -192,8 +192,19 @@ public class Fachada {
 		return Integer.toString(a.getId());
 	}
 
-	public String restaurarAgendamento(String id) {
-		return null;
+	public String restaurarAgendamento(String id) {	// falta validação
+		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
+		String a = Integer.toString(agendamento.getId());
+		String c = Integer.toString(agendamento.getCliente().getId());
+		String arq = System.getProperty("user.home")+"/dmc/"+c+"/"+a+".tar.gz";
+		return arq+" "+c;
+	}
+	
+	public File buscarArquivo(String arquivo) {
+		File retorno = new File(arquivo);
+		if(!retorno.exists())
+			return null;
+		return retorno;
 	}
 
 }

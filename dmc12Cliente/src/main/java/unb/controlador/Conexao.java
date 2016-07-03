@@ -56,8 +56,8 @@ public class Conexao implements Runnable{
 		return sktCliente.enviarMsg(payload);
 	}
 
-	public File buscarArquivo(String diretorio) {
-		return fachada.buscarArquivo(diretorio);
+	public File buscarArquivo(String arquivo) {
+		return fachada.buscarArquivo(arquivo);
 	}
 
 	public void salvarLog(String[] log) {
@@ -74,5 +74,9 @@ public class Conexao implements Runnable{
 
 	public int getId() {
 		return fachada.getId();
+	}
+
+	public void restaurar(String id, String endereco) {
+		sktCliente.restaurar("6 "+id, endereco);
 	}
 }
