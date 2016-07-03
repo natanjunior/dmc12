@@ -159,10 +159,10 @@ public class Principal extends JPanel{
 		for (int i = 0; i < agendamentos.length; i=i+5) {
 			bxAgendamento = Box.createHorizontalBox();
 			lbId = new JLabel(agendamentos[i]);
-			String id = agendamentos[i];
+			final String id = agendamentos[i];
 			bxAgendamento.add(lbId);
 			lbArq = new JLabel(agendamentos[i+1]);
-			String end = agendamentos[i+1];
+			final String end = agendamentos[i+1];
 			bxAgendamento.add(lbArq);
 			lbData = new JLabel(agendamentos[i+2]);
 			bxAgendamento.add(lbData);
