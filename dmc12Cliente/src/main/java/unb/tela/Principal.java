@@ -7,6 +7,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -43,6 +44,7 @@ public class Principal extends JPanel{
 	private JFileChooser arquivoFC;
 	private File arquivo;
 	private DateFormat df;
+	private Box bxListaAgendamento, bxAgendamento;
 	
 	public Principal(Tela t) {
 		super();
@@ -106,11 +108,14 @@ public class Principal extends JPanel{
 		novoPanel.add(agendarBtn);
 		
 		agendadosPanel = new JPanel();
-		agendadosPanel.setLayout(new BorderLayout());
 		
 		lbAgendados = new JLabel("Agendamentos");
 		
-		agendadosPanel.add(lbAgendados, BorderLayout.CENTER);
+		bxListaAgendamento = Box.createVerticalBox();
+		bxAgendamento = Box.createHorizontalBox();
+		
+		bxAgendamento.add(lbAgendados);
+		bxListaAgendamento.add(bxAgendamento);
 		
 		this.add(novoPanel, BorderLayout.PAGE_START);
 		this.add(agendadosPanel, BorderLayout.CENTER);
@@ -143,39 +148,28 @@ public class Principal extends JPanel{
 	}
 
 	public void criarLista(String[] agendamentos) {
+		agendadosPanel.remove(bxListaAgendamento);
+		this.remove(agendadosPanel);
+		bxListaAgendamento = Box.createVerticalBox();
+		bxAgendamento = Box.createHorizontalBox();
+		bxAgendamento.add(lbAgendados);
+		bxListaAgendamento.add(bxAgendamento);
 		if(agendamentos==null)
 			return;
-		agendadosPanel.setLayout(new GridBagLayout());
-//		agendadosPanel.setBackground(new Color(107, 106, 104));
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weighty = 1;
-		c.weightx = 1;
-		c.gridwidth = 5;
-		agendadosPanel.add(lbAgendados,c);
-		c.gridwidth = 1;
 		for (int i = 0; i < agendamentos.length; i=i+5) {
-			c.gridy = 1+(i/5);
+			bxAgendamento = Box.createHorizontalBox();
 			lbId = new JLabel(agendamentos[i]);
 			String id = agendamentos[i];
-			c.gridx = 0;
-			agendadosPanel.add(lbId,c);
+			bxAgendamento.add(lbId);
 			lbArq = new JLabel(agendamentos[i+1]);
 			String end = agendamentos[i+1];
-			c.gridx = 1;
-			agendadosPanel.add(lbArq,c);
+			bxAgendamento.add(lbArq);
 			lbData = new JLabel(agendamentos[i+2]);
-			c.gridx = 2;
-			agendadosPanel.add(lbData,c);
+			bxAgendamento.add(lbData);
 			lbHora = new JLabel(agendamentos[i+3]);
-			c.gridx = 3;
-			agendadosPanel.add(lbHora,c);
+			bxAgendamento.add(lbHora);
 			lbEstado = new JLabel(tela.rotuloEstado(Integer.parseInt(agendamentos[i+4])));
-			c.gridx = 4;
-			agendadosPanel.add(lbEstado,c);
-			c.gridx = 5;
+			bxAgendamento.add(lbEstado);
 			if(agendamentos[i+4].equals("2")){
 				act1Btn = new JButton("Excluir");
 				act1Btn.addActionListener(new ActionListener() {
@@ -183,15 +177,14 @@ public class Principal extends JPanel{
 						excluir(id);
 					}
 				});
-				agendadosPanel.add(act1Btn,c);
+				bxAgendamento.add(act1Btn);
 				act1Btn = new JButton("Restaurar");
 				act1Btn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						restaurar(id, end);
 					}
 				});
-				c.gridx = 6;
-				agendadosPanel.add(act1Btn,c);
+				bxAgendamento.add(act1Btn);
 			}else if((agendamentos[i+4].equals("0"))||(agendamentos[i+4].equals("1"))){
 				act1Btn = new JButton("Cancelar");
 				act1Btn.addActionListener(new ActionListener() {
@@ -199,30 +192,29 @@ public class Principal extends JPanel{
 						cancelar(id);
 					}
 				});
-				agendadosPanel.add(act1Btn,c);
+				bxAgendamento.add(act1Btn);
 				act1Btn = new JButton("Reagendar");
 				act1Btn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						reagendar(id);
 					}
 				});
-				c.gridx = 6;
-				agendadosPanel.add(act1Btn,c);
+				bxAgendamento.add(act1Btn);
 			}else{
 				act1Btn = new JButton("Cancelar");
 				act1Btn.setEnabled(false);
-				agendadosPanel.add(act1Btn,c);
+				bxAgendamento.add(act1Btn);
 				act1Btn = new JButton("Reagendar");
 				act1Btn.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						reagendar(id);
 					}
 				});
-				c.gridx = 6;
-				agendadosPanel.add(act1Btn,c);
+				bxAgendamento.add(act1Btn);
 			}
+			bxListaAgendamento.add(bxAgendamento);
 		}
-	
+		agendadosPanel.add(bxListaAgendamento);
 		this.add(agendadosPanel, BorderLayout.CENTER);
 		
 		this.validate();
@@ -258,5 +250,4 @@ public class Principal extends JPanel{
 		if(true)	// mudar aqui - fazer validacao
 			tela.editarAgendamento(msg);
 	}
-
 }

@@ -44,7 +44,7 @@ public class Fachada {
 		Thread t = new Thread(conexao);
 		t.start();
 		tela.inicial();
-		entrar("dias", "123");
+		entrar("natan", "123");
 //		agendar(" /Users/natan.junior/teste 01/07/2016 10:40:10");
 	}
 		
@@ -73,7 +73,8 @@ public class Fachada {
 	}
 	
 	public void agendar(String msg) {
-		conexao.enviarMsg("2 "+cliente.getId()+msg);
+		String retorno = conexao.enviarMsg("2 "+cliente.getId()+msg);
+		atualizar();
 	}
 	
 	private String pegarHash(String palavra){
@@ -109,10 +110,12 @@ public class Fachada {
 
 	public void excluirAgendamento(String id) {	// falta validação - mandar id
 		conexao.enviarMsg("4 "+id);
+		atualizar();
 	}
 	
 	public void cancelarAgendamento(String id) {	// falta validação - mandar id
 		conexao.enviarMsg("5 "+id);
+		atualizar();
 	}
 	
 	public void restaurarAgendamento(String id, String endereco) {	// falta validação - mandar id
@@ -129,6 +132,11 @@ public class Fachada {
 	
 	public void editarAgendamento(String msg) {
 		conexao.enviarMsg("7 "+msg);
+		atualizar();
+	}
+	
+	public void atualizar(){
+		tela.principal();
 	}
 	
 	public String getHMAC(int c, String end){

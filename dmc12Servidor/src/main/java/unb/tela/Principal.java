@@ -23,6 +23,7 @@ public class Principal extends JPanel{
 	private JTableHeader thUsuarios, thAgendamentos;
 	private JLabel lbUsuarios, lbAgendamentos;
 	private DefaultTableModel mdlUsuario, mdlAgendamento;
+	private Box bxAgendamento, bxListaAgendamento, bxCliente, bxListaCliente;
 	
 	public Principal(Tela t, Fachada f) {
 		super();
@@ -36,80 +37,55 @@ public class Principal extends JPanel{
 		usuariosPanel.setLayout(new BoxLayout(usuariosPanel, BoxLayout.Y_AXIS));
 		
 		lbUsuarios = new JLabel("Usuarios");
-		
-		criarTabelas();
-		
-		usuariosPanel.add(lbUsuarios);
-		usuariosPanel.add(thUsuarios);
-		usuariosPanel.add(tbUsuarios);
-		
-		agendamentosPanel = new JPanel();
-		agendamentosPanel.setLayout(new BoxLayout(agendamentosPanel, BoxLayout.Y_AXIS));
-				
 		lbAgendamentos = new JLabel("Agendamentos");
 		
-		agendamentosPanel.add(lbAgendamentos);
-		agendamentosPanel.add(thAgendamentos);
-		agendamentosPanel.add(tbAgendamentos);
+		bxListaAgendamento = Box.createVerticalBox();
+		bxAgendamento = Box.createHorizontalBox();
+		bxListaCliente = Box.createVerticalBox();
+		bxCliente = Box.createHorizontalBox();
+		
+		bxAgendamento.add(lbAgendamentos);
+		bxListaAgendamento.add(bxAgendamento);
+		bxCliente.add(lbUsuarios);
+		bxListaCliente.add(bxCliente);
+				
+		agendamentosPanel = new JPanel();
+		agendamentosPanel.setLayout(new BoxLayout(agendamentosPanel, BoxLayout.Y_AXIS));
 		
 		this.add(usuariosPanel, BorderLayout.LINE_START);
 		this.add(agendamentosPanel, BorderLayout.CENTER);
+		
+		criarTabelas();
 	}
 	
 	public void criarTabelas(){
-		mdlUsuario = new DefaultTableModel();
-		tbUsuarios = new JTable(mdlUsuario);
-		tbUsuarios.setSelectionMode(0);
-		mdlUsuario.addColumn("Id");
-		mdlUsuario.addColumn("Login");
-		mdlUsuario.addColumn("Endereço");
-		mdlUsuario.addColumn("Porta");
-		tbUsuarios.getColumnModel().getColumn(0).setPreferredWidth(40);
-		tbUsuarios.getColumnModel().getColumn(1).setPreferredWidth(100);
-		tbUsuarios.getColumnModel().getColumn(2).setPreferredWidth(100);
-		tbUsuarios.getColumnModel().getColumn(3).setPreferredWidth(45);
-		mdlUsuario.setNumRows(0);
-//		tbUsuarios.setDefaultRenderer(Object.class, new DefaultTableCellRenderer(){
-//		    @Override
-//		    public Component getTableCellRendererComponent(JTable table,
-//		            Object value, boolean isSelected, boolean hasFocus, int row, int col) {
-//
-//		        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-//
-//		        String status = (String)table.getModel().getValueAt(row, 2);
-//		        if ("-".equals(status)) {
-//		            setBackground(new Color(255, 255, 230));
-//		            setForeground(Color.BLACK);
-//		        } else {
-//		            setBackground(new Color(255, 255, 230));
-//		            setForeground(Color.BLACK);
-//		        }       
-//		        return this;
-//		    }   
-//		});
-		for (Cliente c : fachada.getClientes()) {
-			mdlUsuario.addRow(new Object[]{c.getId(), c.getNome(), c.getEndereco(), c.getPorta()});
-		}
-		thUsuarios = tbUsuarios.getTableHeader();
+		this.remove(usuariosPanel);
+		this.remove(agendamentosPanel);
 		
-		mdlAgendamento = new DefaultTableModel();
-		tbAgendamentos = new JTable(mdlAgendamento);
-		tbAgendamentos.setSelectionMode(0);
-		mdlAgendamento.addColumn("Id");
-		mdlAgendamento.addColumn("Arquivo");
-		mdlAgendamento.addColumn("Cliente");
-		mdlAgendamento.addColumn("Data");
-		mdlAgendamento.addColumn("Estado");
-		tbAgendamentos.getColumnModel().getColumn(0).setPreferredWidth(25);
-		tbAgendamentos.getColumnModel().getColumn(1).setPreferredWidth(200);
-		tbAgendamentos.getColumnModel().getColumn(2).setPreferredWidth(100);
-		tbAgendamentos.getColumnModel().getColumn(3).setPreferredWidth(200);
-		tbAgendamentos.getColumnModel().getColumn(4).setPreferredWidth(100);
-		mdlAgendamento.setNumRows(0);
-		for (Agendamento a : fachada.getAgendamentos()) {
-			mdlAgendamento.addRow(new Object[]{a.getId(), a.getArquivo(), a.getCliente().getNome(), a.getData(), tela.rotuloEstado(a.getEstado())});
+		for(Cliente c : fachada.getClientes()){
+			bxCliente = Box.createHorizontalBox();
+			bxCliente.add(new JLabel(Integer.toString(c.getId())));
+			bxCliente.add(new JLabel(c.getNome()));
+			bxCliente.add(new JLabel(c.getEndereco()));
+			bxCliente.add(new JLabel(Integer.toString(c.getPorta())));
+			bxListaCliente.add(bxCliente);
 		}
-		thAgendamentos = tbAgendamentos.getTableHeader();
+		usuariosPanel.add(bxListaCliente);
+		
+		for(Agendamento a : fachada.getAgendamentos()){
+			bxAgendamento = Box.createHorizontalBox();
+			bxAgendamento.add(new JLabel(Integer.toString(a.getId())));
+			bxAgendamento.add(new JLabel(a.getArquivo()));
+			bxAgendamento.add(new JLabel(a.getData()));
+			bxAgendamento.add(new JLabel(tela.rotuloEstado(a.getEstado())));
+			bxListaAgendamento.add(bxAgendamento);
+		}
+		agendamentosPanel.add(bxListaAgendamento);
+		
+		this.add(usuariosPanel, BorderLayout.LINE_START);
+		this.add(agendamentosPanel, BorderLayout.CENTER);
+		
+		this.validate();
 	}
 
 	public void atualizar() {
