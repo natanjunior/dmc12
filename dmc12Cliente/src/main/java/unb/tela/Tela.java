@@ -36,9 +36,7 @@ public class Tela extends JFrame {
 
 	public void principal() {
 		String[] agendamentos = fachada.listar();
-		if(agendamentos.length > 0){
-			principal.criarLista(agendamentos);
-		}
+		principal.criarLista(agendamentos);
 		
 		this.getContentPane().removeAll();
 		this.getContentPane().add(principal);
@@ -63,6 +61,27 @@ public class Tela extends JFrame {
 	
 	public void editarAgendamento(String msg) {
 		fachada.editarAgendamento(msg);
+	}
+	
+	public String rotuloEstado(int e){
+		String retorno = "";
+		switch(e){
+		case -3:
+			retorno = "EXCLUIDO";
+			break;
+		case -1:
+			retorno = "CANCELADO";
+			break;
+		case 0:
+			retorno = "AGENDADO";
+			break;
+		case 1:
+			retorno = "ERRO";
+		case 2:
+			retorno = "ARMAZENADO";
+			break;
+		}
+		return retorno;
 	}
 
 }

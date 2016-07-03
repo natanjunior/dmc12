@@ -143,6 +143,8 @@ public class Principal extends JPanel{
 	}
 
 	public void criarLista(String[] agendamentos) {
+		if(agendamentos==null)
+			return;
 		agendadosPanel.setLayout(new GridBagLayout());
 //		agendadosPanel.setBackground(new Color(107, 106, 104));
 		GridBagConstraints c = new GridBagConstraints();
@@ -170,7 +172,7 @@ public class Principal extends JPanel{
 			lbHora = new JLabel(agendamentos[i+3]);
 			c.gridx = 3;
 			agendadosPanel.add(lbHora,c);
-			lbEstado = new JLabel(agendamentos[i+4]);
+			lbEstado = new JLabel(tela.rotuloEstado(Integer.parseInt(agendamentos[i+4])));
 			c.gridx = 4;
 			agendadosPanel.add(lbEstado,c);
 			c.gridx = 5;

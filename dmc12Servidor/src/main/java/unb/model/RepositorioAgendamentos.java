@@ -30,12 +30,13 @@ public class RepositorioAgendamentos {
 	}
 	
 	public ArrayList<Agendamento> getAgendamentos(Cliente c) {
+		int cliente = c.getId();
 		ArrayList<Agendamento> retorno = new ArrayList<Agendamento>();
 		for (Agendamento a : agendamentos) {
-			if(a.getCliente().equals(c))
+			if(a.getCliente().getId()==cliente)
 				retorno.add(a);
 		}
-		return agendamentos;
+		return retorno;
 	}
 
 	public int size() {

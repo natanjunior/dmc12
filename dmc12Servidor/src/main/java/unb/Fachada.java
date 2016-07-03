@@ -24,6 +24,7 @@ public class Fachada {
 	private Banco banco;
 	private Tela tela;
 	private Timer timer;
+	private Log log;
 	
 	public static Fachada obterInstancia(){
 		if(instancia == null){
@@ -37,6 +38,7 @@ public class Fachada {
 		banco = new Banco(this);
 		tela = new Tela(this);
 		timer = new Timer();
+		log = new Log(this);
 	}
 
 	public void init() {
@@ -49,6 +51,7 @@ public class Fachada {
 	}
 
 	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {
+		log.logging("endereço:"+endereco+" porta:"+porta+" # CADASTRO: "+nome);
 		Cliente c = new Cliente(nome, chave);
 		c.setEndereco(endereco, porta);
 		int id = banco.addCliente(c);
@@ -56,6 +59,7 @@ public class Fachada {
 	}
 	
 	public int loginCliente(String nome, String chave, String endereco, int porta) {
+		log.logging("endereço:"+endereco+" porta:"+porta+" # LOGIN: "+nome);
 		Cliente c = banco.buscaCliente(nome);
 		int id=-1;
 		if(c!=null){
@@ -68,6 +72,7 @@ public class Fachada {
 	}
 
 	public int agendar(String idCliente, String arquivo, String data, String hora) {
+		log.logging("cliente:"+idCliente+" # AGENDAMENTO: "+arquivo+" "+data+" "+hora);
 		Cliente c = banco.buscaCliente(Integer.parseInt(idCliente));
 		Agendamento a = new Agendamento(c, arquivo, data, hora);
 		int id = banco.addAgendamento(a);
@@ -158,7 +163,7 @@ public class Fachada {
 	public String listarAgendamento(int id) {
 		StringBuilder sb = new StringBuilder();
 		Cliente cliente = banco.buscaCliente(id);
-		for (Agendamento a : banco.getAgendamentos(cliente)) {
+		for (Agendamento a : banco.buscaAgendamentos(cliente)) {
 			sb.append(a.getId()).append(" ").append(a.getArquivo()).append(" ").append(a.getData()).append(" ").append(a.getEstado()).append(" ");
 		}
 		return sb.toString();
@@ -175,6 +180,7 @@ public class Fachada {
 		String c = Integer.toString(agendamento.getCliente().getId());
 		new File(System.getProperty("user.home")+"/dmc/"+c+"/"+a+".tar.gz").delete();	
 		banco.alterarAgendamentos();
+		log.logging("cliente:"+c+" # EXCLUIR AGENDAMENTO: "+a);
 		return id;
 	}
 
@@ -189,6 +195,7 @@ public class Fachada {
 		b.setEstado(-1);
 		banco.removeBackup(b);
 		banco.alterarAgendamentos();
+		log.logging("cliente:"+agendamento.getCliente().getId()+" # CANCELAR AGENDAMENTO: "+agendamento.getId());
 		return id;
 	}
 
@@ -199,6 +206,7 @@ public class Fachada {
 		String a = Integer.toString(agendamento.getId());
 		String c = Integer.toString(agendamento.getCliente().getId());
 		String arq = System.getProperty("user.home")+"/dmc/"+c+"/"+a+".tar.gz";
+		log.logging("cliente:"+c+" # RESTAURAR AGENDAMENTO: "+a);
 		return arq+" "+c;
 	}
 	
@@ -225,6 +233,7 @@ public class Fachada {
 		banco.addBackup(b);
 		setarBackup(b);
 		banco.alterarAgendamentos();
+		log.logging("cliente:"+agendamento.getCliente().getId()+" # AGENDAMENTO AGENDAMENTO: "+agendamento.getId());
 		return id;
 	}
 

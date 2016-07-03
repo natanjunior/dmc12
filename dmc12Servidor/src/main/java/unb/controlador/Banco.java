@@ -19,7 +19,7 @@ public class Banco {
 	private RepositorioClientes rpClientes;
 	private RepositorioAgendamentos rpAgendamentos;
 	private RepositorioBackups rpBackups;
-	private File arqLog, arqClientes, arqAgendamentos;
+	private File arqClientes, arqAgendamentos;
 	private int newClienteId, newAgendamentoId = 1;
 	private XStream xstream;
 	private String pastaHome;
@@ -94,11 +94,15 @@ public class Banco {
 
 	public int addCliente(Cliente c) {
 		int id = rpClientes.add(c);
+		int porta = c.getPorta();
+		String end = c.getEndereco();
 		if(id>0){
 			xstream.alias("cliente", Cliente.class);
+			c.setEndereco("-", 0);
 			String xml = xstream.toXML(c);
 			escreverArq(arqClientes, xml);
 			new File(pastaHome+id).mkdir();
+			c.setEndereco(end, porta);
 		}
 		return id;
 	}
@@ -141,11 +145,6 @@ public class Banco {
 		return  (Cliente) xstream.fromXML(xml);
 	}
 	
-	public Agendamento lerAgendamentoXML(String xml){
-		xstream.alias("agendamento", Agendamento.class);
-		return  (Agendamento) xstream.fromXML(xml);
-	}
-
 	public Cliente buscaCliente(String nome) {
 		return rpClientes.busca(nome);
 	}
@@ -184,7 +183,7 @@ public class Banco {
 		escreverArq2(arqAgendamentos, xml);
 	}
 
-	public ArrayList<Agendamento> getAgendamentos(Cliente c) { // deveria ser "busca"
+	public ArrayList<Agendamento> buscaAgendamentos(Cliente c) { // deveria ser "busca"
 		return rpAgendamentos.getAgendamentos(c);
 	}
 

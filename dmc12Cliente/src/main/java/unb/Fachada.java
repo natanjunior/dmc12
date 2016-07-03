@@ -44,7 +44,7 @@ public class Fachada {
 		Thread t = new Thread(conexao);
 		t.start();
 		tela.inicial();
-		entrar("natan", "123");
+		entrar("dias", "123");
 //		agendar(" /Users/natan.junior/teste 01/07/2016 10:40:10");
 	}
 		
@@ -102,7 +102,8 @@ public class Fachada {
 	public String[] listar() {	// falta validação
 		String[] retorno = null;
 		String r = conexao.enviarMsg("3 "+cliente.getId());
-		retorno = r.split(" ");
+		if(r!=null)
+			retorno = r.split(" ");
 		return retorno;
 	}
 

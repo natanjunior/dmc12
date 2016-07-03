@@ -30,4 +30,25 @@ public class Tela extends JFrame {
 	public void atualizar() {
 		principal.atualizar();
 	}
+	
+	public String rotuloEstado(int e){
+		String retorno = "";
+		switch(e){
+		case -3:
+			retorno = "EXCLUIDO";
+			break;
+		case -1:
+			retorno = "CANCELADO";
+			break;
+		case 0:
+			retorno = "AGENDADO";
+			break;
+		case 1:
+			retorno = "ERRO";
+		case 2:
+			retorno = "ARMAZENADO";
+			break;
+		}
+		return retorno;
+	}
 }
