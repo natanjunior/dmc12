@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Principal extends JPanel{
 	private DefaultTableModel mdlUsuario, mdlAgendamento;
 	private Box bxAgendamento, bxListaAgendamento, bxCliente, bxListaCliente;
 	private Color cinzaClaro, cinzaEscuro;
+	private int xSize, ySize;
 	
 	public Principal(Tela t, Fachada f) {
 		super();
@@ -37,8 +39,13 @@ public class Principal extends JPanel{
 		
 		this.setLayout(new BorderLayout());
 		
+		Toolkit tk = Toolkit.getDefaultToolkit(); // usar tamanho maximo da tela
+		this.xSize = ((int) tk.getScreenSize().getWidth());
+		this.ySize = ((int) tk.getScreenSize().getHeight());
+		
 		usuariosPanel = new JPanel();
 		usuariosPanel.setLayout(new BoxLayout(usuariosPanel, BoxLayout.Y_AXIS));
+		usuariosPanel.setPreferredSize(new Dimension(350, Integer.MAX_VALUE));
 		
 		lbUsuarios = new JLabel("Clientes");
 		lbUsuarios.setFont(lbUsuarios.getFont().deriveFont(20.0f));
@@ -57,6 +64,8 @@ public class Principal extends JPanel{
 				
 		agendamentosPanel = new JPanel();
 		agendamentosPanel.setLayout(new BoxLayout(agendamentosPanel, BoxLayout.Y_AXIS));
+		agendamentosPanel.setPreferredSize(new Dimension(xSize-350, Integer.MAX_VALUE));
+		agendamentosPanel.setBorder(BorderFactory.createMatteBorder(0, 1, 0, 0, Color.BLACK));
 		
 		this.cinzaClaro = new Color(224, 224, 224);
 		this.cinzaEscuro = new Color(192, 192, 192);
@@ -71,6 +80,8 @@ public class Principal extends JPanel{
 		this.remove(usuariosPanel);
 		this.remove(agendamentosPanel);
 		
+		this.validate();
+		
 		bxListaAgendamento = Box.createVerticalBox();
 		bxAgendamento = Box.createHorizontalBox();
 		bxListaCliente = Box.createVerticalBox();
@@ -80,8 +91,11 @@ public class Principal extends JPanel{
 		bxListaAgendamento.add(bxAgendamento);
 		bxAgendamento = Box.createHorizontalBox();
 		bxAgendamento.add(new JLabel("#"));
+		bxAgendamento.add(Box.createHorizontalGlue());
 		bxAgendamento.add(new JLabel("Arquivo"));
+		bxAgendamento.add(Box.createHorizontalGlue());
 		bxAgendamento.add(new JLabel("Data"));
+		bxAgendamento.add(Box.createHorizontalGlue());
 		bxAgendamento.add(new JLabel("Estado"));
 		bxAgendamento.setOpaque(true);
 		bxAgendamento.setBackground(cinzaEscuro);
@@ -91,8 +105,11 @@ public class Principal extends JPanel{
 		bxListaCliente.add(bxCliente);
 		bxCliente = Box.createHorizontalBox();
 		bxCliente.add(new JLabel("#"));
+		bxCliente.add(Box.createHorizontalGlue());
 		bxCliente.add(new JLabel("Login"));
+		bxCliente.add(Box.createHorizontalGlue());
 		bxCliente.add(new JLabel("Endereço"));
+		bxCliente.add(Box.createHorizontalGlue());
 		bxCliente.add(new JLabel("Porta"));
 		bxCliente.setOpaque(true);
 		bxCliente.setBackground(cinzaEscuro);
@@ -101,8 +118,11 @@ public class Principal extends JPanel{
 		for(Cliente c : fachada.getClientes()){
 			bxCliente = Box.createHorizontalBox();
 			bxCliente.add(new JLabel(Integer.toString(c.getId())));
+			bxCliente.add(Box.createHorizontalGlue());
 			bxCliente.add(new JLabel(c.getNome()));
+			bxCliente.add(Box.createHorizontalGlue());
 			bxCliente.add(new JLabel(c.getEndereco()));
+			bxCliente.add(Box.createHorizontalGlue());
 			bxCliente.add(new JLabel(Integer.toString(c.getPorta())));
 			bxCliente.setOpaque(true);
 			bxCliente.setBackground(cinzaClaro);
@@ -113,8 +133,11 @@ public class Principal extends JPanel{
 		for(Agendamento a : fachada.getAgendamentos()){
 			bxAgendamento = Box.createHorizontalBox();
 			bxAgendamento.add(new JLabel(Integer.toString(a.getId())));
+			bxAgendamento.add(Box.createHorizontalGlue());
 			bxAgendamento.add(new JLabel(a.getArquivo()));
+			bxAgendamento.add(Box.createHorizontalGlue());
 			bxAgendamento.add(new JLabel(a.getData()));
+			bxAgendamento.add(Box.createHorizontalGlue());
 			bxAgendamento.add(new JLabel(tela.rotuloEstado(a.getEstado())));
 			bxAgendamento.setOpaque(true);
 			bxAgendamento.setBackground(cinzaClaro);

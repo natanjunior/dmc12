@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import unb.Fachada;
 
@@ -17,6 +18,7 @@ public class Conexao implements Runnable{
 	private ServerSocket servidor;
 	private Socket cliente;
 	private ArrayList<String[]> logs; // isto não é daqui!
+	private Semaphore semaforo;
 	
 	public Conexao(Fachada f) {
 		this.fachada = f;
@@ -30,6 +32,7 @@ public class Conexao implements Runnable{
 			endereco = servidor.getInetAddress().getHostAddress() + " " + porta;
 			sktCliente = new SocketCliente(this);
 			sktServidor = new SocketServidor(this);
+			semaforo = new Semaphore(1);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -54,7 +57,7 @@ public class Conexao implements Runnable{
 		try{
 			while(true) {
 				Socket cliente = servidor.accept();
-				SocketServidor tratamento = new SocketServidor(this, cliente);
+				SocketServidor tratamento = new SocketServidor(this, cliente, semaforo);
 				Thread t = new Thread(tratamento);
 				t.start();
 			}
@@ -80,20 +83,20 @@ public class Conexao implements Runnable{
 		return fachada.listarAgendamento(Integer.parseInt(cliente));
 	}
 
-	public String excluirAgendamento(String id) {
-		return fachada.excluirAgendamento(id);
+	public String excluirAgendamento(String agendamento, String cliente) {
+		return fachada.excluirAgendamento(agendamento, cliente);
 	}
 
-	public String cancelarAgendamento(String id) {
-		return fachada.cancelarAgendamento(id);
+	public String cancelarAgendamento(String agendamento, String cliente) {
+		return fachada.cancelarAgendamento(agendamento, cliente);
 	}
 
 	public String restaurarAgendamento(String id) {
 		return fachada.restaurarAgendamento(id);
 	}
 
-	public String editarAgendamento(String id, String novaData, String novaHora) {
-		return fachada.editarAgendamento(id, novaData, novaHora);
+	public String editarAgendamento(String cliente, String agendamento, String novaData, String novaHora) {
+		return fachada.editarAgendamento(cliente, agendamento, novaData, novaHora);
 	}
 	
 	public File buscarArquivo(String diretorio) {

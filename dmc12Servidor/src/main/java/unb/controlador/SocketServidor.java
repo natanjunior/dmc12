@@ -13,6 +13,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.concurrent.Semaphore;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -21,14 +22,16 @@ public class SocketServidor implements Runnable{
 	private Conexao conexao;
 	private Socket cliente;
 	private Boolean enviarArq = false;
+	private Semaphore semaforo;
 	
 	public SocketServidor(Conexao c) {
 		this.conexao = c;
 	}
 	
-	public SocketServidor(Conexao cn, Socket c) {
+	public SocketServidor(Conexao cn, Socket c, Semaphore s) {
 		this.conexao = cn;
 		this.cliente = c;
+		this.semaforo = s;
 	}
 	
 	public String comando(String payload){
@@ -52,10 +55,10 @@ public class SocketServidor implements Runnable{
 			retorno = conexao.listar(comandos[1]);
 			break;
 		case "4":
-			retorno = conexao.excluirAgendamento(comandos[1]);
+			retorno = conexao.excluirAgendamento(comandos[2], comandos[1]);
 			break;
 		case "5":
-			retorno = conexao.cancelarAgendamento(comandos[1]);
+			retorno = conexao.cancelarAgendamento(comandos[2], comandos[1]);
 			break;
 		case "6":
 			retorno = conexao.restaurarAgendamento(comandos[1]);
@@ -63,9 +66,8 @@ public class SocketServidor implements Runnable{
 				enviarArq = true;
 			break;
 		case "7":
-			System.out.println(payload);
 			if(comandos.length==5) //	fazer validação
-				retorno = conexao.editarAgendamento(comandos[1], comandos[2], comandos[3]);
+				retorno = conexao.editarAgendamento(comandos[1], comandos[2], comandos[3], comandos[4]);
 			break;
 		case "8":
 			retorno = conexao.buscarLog(System.getProperty("user.home")+"/dmc/"+comandos[1]);
@@ -125,7 +127,16 @@ public class SocketServidor implements Runnable{
 			
 			entrada.close();
 			cliente.close();
-			conexao.atualizar();
+			if(!enviarArq){
+				try {
+			        semaforo.acquire();
+			        conexao.atualizar();
+			    } catch (InterruptedException e) {
+			        e.printStackTrace();
+			    } finally {
+			        semaforo.release();
+			    }
+			}
 		}catch(Exception e) {
 			System.out.println("Erro: " + e.getMessage());
 		}

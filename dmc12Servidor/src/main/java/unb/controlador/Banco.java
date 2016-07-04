@@ -198,4 +198,8 @@ public class Banco {
 	public void removeBackup(Backup b) {
 		rpBackups.remove(b);
 	}
+
+	public boolean verificaCliente(int id) {
+		return rpClientes.verificaCliente(id);
+	}
 }

@@ -42,4 +42,12 @@ public class RepositorioClientes {
 	public ArrayList<Cliente> getClientes() {
 		return clientes;
 	}
+
+	public boolean verificaCliente(int id) {
+		for(Cliente c : clientes) {
+			if (c.getId()==id)
+				return true;
+		}
+		return false;
+	}
 }

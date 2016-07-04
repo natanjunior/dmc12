@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFormattedTextField.AbstractFormatter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -25,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import unb.helper.DateLabelFormatter;
@@ -65,7 +67,7 @@ public class Principal extends JPanel{
 		datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
 		
 		calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 24); // 24 == 12 PM == 00:00:00
+        calendar.set(Calendar.HOUR_OF_DAY, 24);
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
 
@@ -249,5 +251,5 @@ public class Principal extends JPanel{
 		
 		if(true)	// mudar aqui - fazer validacao
 			tela.editarAgendamento(msg);
-	}
+	}	
 }

@@ -45,6 +45,7 @@ public class Fachada {
 		banco.carregaUsuarios();
 		banco.carregaAgendamentos();
 		tela.inicial();
+		setarPorta(2016);
 	}
 
 	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {
@@ -166,8 +167,10 @@ public class Fachada {
 		return sb.toString();
 	}
 
-	public String excluirAgendamento(String id) {
-		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
+	public String excluirAgendamento(String agendamentoId, String clienteId) {
+		if(verificaCliente(Integer.parseInt(clienteId)))
+			return "-99";
+		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(agendamentoId));
 		if(agendamento==null)
 			return "-1";
 		if(agendamento.getEstado()!=2)	// só por segurança
@@ -178,11 +181,13 @@ public class Fachada {
 		new File(System.getProperty("user.home")+"/dmc/"+c+"/"+a+".tar.gz").delete();	
 		banco.alterarAgendamentos();
 		log.logging("cliente:"+c+" # EXCLUIR AGENDAMENTO: "+a);
-		return id;
+		return agendamentoId;
 	}
 
-	public String cancelarAgendamento(String id) {
-		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
+	public String cancelarAgendamento(String agendamentoId, String clienteId) {
+		if(verificaCliente(Integer.parseInt(clienteId)))
+			return "-99";
+		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(agendamentoId));
 		if(agendamento==null)
 			return "-1";
 		if(agendamento.getEstado()==2)
@@ -193,7 +198,7 @@ public class Fachada {
 		banco.removeBackup(b);
 		banco.alterarAgendamentos();
 		log.logging("cliente:"+agendamento.getCliente().getId()+" # CANCELAR AGENDAMENTO: "+agendamento.getId());
-		return id;
+		return agendamentoId;
 	}
 
 	public String restaurarAgendamento(String id) {	// falta validação
@@ -214,7 +219,9 @@ public class Fachada {
 		return retorno;
 	}
 
-	public String editarAgendamento(String id, String novaData, String novaHora) {
+	public String editarAgendamento(String clienteId, String id, String novaData, String novaHora) {
+		if(verificaCliente(Integer.parseInt(clienteId)))
+			return "-99";
 		Agendamento agendamento = banco.getAgendamento(Integer.parseInt(id));
 		if(agendamento==null)
 			return "-1";
@@ -232,6 +239,10 @@ public class Fachada {
 		banco.alterarAgendamentos();
 		log.logging("cliente:"+agendamento.getCliente().getId()+" # AGENDAMENTO AGENDAMENTO: "+agendamento.getId());
 		return id;
+	}
+	
+	private boolean verificaCliente(int id) {
+		return banco.verificaCliente(id);
 	}
 
 	public void setarPorta(int porta) {
