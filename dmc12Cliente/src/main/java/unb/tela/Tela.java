@@ -84,4 +84,8 @@ public class Tela extends JFrame {
 		return retorno;
 	}
 
+	public void setarPorta(int porta) {
+		fachada.setarPorta(porta);
+	}
+
 }

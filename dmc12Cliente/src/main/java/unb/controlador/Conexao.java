@@ -36,6 +36,10 @@ public class Conexao implements Runnable{
 		return porta;
 	}
 	
+	public void setPorta(int porta){
+		sktCliente.setPorta(porta);
+	}
+	
 	@Override
 	public void run() {
 		System.out.println("CLIENTE - escutando na porta "+porta);

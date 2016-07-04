@@ -18,6 +18,23 @@ public class Login extends JPanel {
 		
 		this.setLayout(new FlowLayout());
 		
+		JPanel configPanel = new JPanel();
+		JLabel lbPorta = new JLabel("Porta");
+		final JTextField tfPorta = new JTextField(10);
+		tfPorta.setText("2016");
+		JButton btPorta = new JButton("Setar Porta");
+		btPorta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int porta = Integer.parseInt(tfPorta.getText());
+				if(porta>1024)
+					tela.setarPorta(porta);
+			}
+		});
+		configPanel.add(lbPorta);
+		configPanel.add(tfPorta);
+		configPanel.add(btPorta);
+		this.add(configPanel);
+		
 		lbLogin = new JLabel("Login");
 		lbCadastro = new JLabel("Cadastro");
 		lbNome = new JLabel("Nome");

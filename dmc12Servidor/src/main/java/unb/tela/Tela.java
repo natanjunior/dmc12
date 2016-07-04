@@ -51,4 +51,12 @@ public class Tela extends JFrame {
 		}
 		return retorno;
 	}
+
+	public void setarPorta(int porta) {
+		fachada.setarPorta(porta);
+	}
+
+	public void principal(String endereco) {
+		principal.telaPrincipal(endereco);
+	}
 }

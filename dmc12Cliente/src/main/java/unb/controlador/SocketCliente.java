@@ -22,7 +22,7 @@ public class SocketCliente{
 	public String enviarMsg(String payload){
 		String retorno = null;
 		try{
-			cliente = new Socket("127.0.0.1",2016);
+			cliente = new Socket("127.0.0.1",porta);
 			OutputStream saida = cliente.getOutputStream();
 			saida.write(payload.getBytes(Charset.forName("UTF-8")));
 			saida.flush();
@@ -79,7 +79,7 @@ public class SocketCliente{
 
 	public void restaurar(String payload, String endereco) {
 		try{
-			cliente = new Socket("127.0.0.1",2016);
+			cliente = new Socket("127.0.0.1",porta);
 			OutputStream saida = cliente.getOutputStream();
 			saida.write(payload.getBytes(Charset.forName("UTF-8")));
 			saida.flush();
@@ -104,4 +104,8 @@ public class SocketCliente{
 			System.out.println("Erro: " + e.getMessage());
 		}
 	}	
+	
+	public void setPorta(int p){
+		this.porta = p;
+	}
 }

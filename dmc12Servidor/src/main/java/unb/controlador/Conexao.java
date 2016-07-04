@@ -20,14 +20,20 @@ public class Conexao implements Runnable{
 	
 	public Conexao(Fachada f) {
 		this.fachada = f;
-		sktCliente = new SocketCliente(this);
-		sktServidor = new SocketServidor(this);
+		this.logs = new ArrayList<String[]>();
+	}
+	
+	public String init(int porta){
+		String endereco = "";
 		try {
-			servidor = new ServerSocket(2016);
+			servidor = new ServerSocket(porta);
+			endereco = servidor.getInetAddress().getHostAddress() + " " + porta;
+			sktCliente = new SocketCliente(this);
+			sktServidor = new SocketServidor(this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.logs = new ArrayList<String[]>();
+		return endereco;
 	}
 	
 	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {

@@ -24,6 +24,7 @@ public class Fachada {
 	private Backup backup;
 	private Socket socket;
 	private int porta;
+	private Boolean conectado = false;
 	
 	public static Fachada obterInstancia(){
 		if(instancia == null){
@@ -40,11 +41,9 @@ public class Fachada {
 	}
 
 	public void init() {
-		porta = conexao.getPorta();
-		Thread t = new Thread(conexao);
-		t.start();
 		tela.inicial();
-		entrar("natan", "123");
+		porta = conexao.getPorta();
+//		entrar("natan", "123");
 //		agendar(" /Users/natan.junior/teste 01/07/2016 10:40:10");
 	}
 		
@@ -170,5 +169,11 @@ public class Fachada {
 			e.printStackTrace();
 		}
         return sEncodedString;
+	}
+
+	public void setarPorta(int porta) {
+		conexao.setPorta(porta);
+		Thread t = new Thread(conexao);
+		t.start();
 	}
 }

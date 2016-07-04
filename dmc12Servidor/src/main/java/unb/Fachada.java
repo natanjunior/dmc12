@@ -44,10 +44,7 @@ public class Fachada {
 	public void init() {
 		banco.carregaUsuarios();
 		banco.carregaAgendamentos();
-		Thread t = new Thread(conexao);
-		t.start();
 		tela.inicial();
-		setarBackups();
 	}
 
 	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {
@@ -235,6 +232,14 @@ public class Fachada {
 		banco.alterarAgendamentos();
 		log.logging("cliente:"+agendamento.getCliente().getId()+" # AGENDAMENTO AGENDAMENTO: "+agendamento.getId());
 		return id;
+	}
+
+	public void setarPorta(int porta) {
+		String endereco = conexao.init(porta);
+		Thread t = new Thread(conexao);
+		t.start();
+		tela.principal(endereco);
+		setarBackups();
 	}
 
 }

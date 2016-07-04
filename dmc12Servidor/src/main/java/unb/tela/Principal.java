@@ -3,7 +3,10 @@ package unb.tela;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -18,12 +21,13 @@ import unb.controlador.Cliente;
 public class Principal extends JPanel{
 	private Tela tela;
 	private Fachada fachada;
-	private JPanel usuariosPanel, agendamentosPanel;
+	private JPanel usuariosPanel, agendamentosPanel, configPanel;
 	private JTable tbUsuarios, tbAgendamentos;
 	private JTableHeader thUsuarios, thAgendamentos;
 	private JLabel lbUsuarios, lbAgendamentos;
 	private DefaultTableModel mdlUsuario, mdlAgendamento;
 	private Box bxAgendamento, bxListaAgendamento, bxCliente, bxListaCliente;
+	private Color cinzaClaro, cinzaEscuro;
 	
 	public Principal(Tela t, Fachada f) {
 		super();
@@ -36,8 +40,10 @@ public class Principal extends JPanel{
 		usuariosPanel = new JPanel();
 		usuariosPanel.setLayout(new BoxLayout(usuariosPanel, BoxLayout.Y_AXIS));
 		
-		lbUsuarios = new JLabel("Usuarios");
+		lbUsuarios = new JLabel("Clientes");
+		lbUsuarios.setFont(lbUsuarios.getFont().deriveFont(20.0f));
 		lbAgendamentos = new JLabel("Agendamentos");
+		lbAgendamentos.setFont(lbAgendamentos.getFont().deriveFont(20.0f));
 		
 		bxListaAgendamento = Box.createVerticalBox();
 		bxAgendamento = Box.createHorizontalBox();
@@ -52,15 +58,45 @@ public class Principal extends JPanel{
 		agendamentosPanel = new JPanel();
 		agendamentosPanel.setLayout(new BoxLayout(agendamentosPanel, BoxLayout.Y_AXIS));
 		
-		this.add(usuariosPanel, BorderLayout.LINE_START);
-		this.add(agendamentosPanel, BorderLayout.CENTER);
+		this.cinzaClaro = new Color(224, 224, 224);
+		this.cinzaEscuro = new Color(192, 192, 192);
 		
-		criarTabelas();
+//		criarTabelas();
+		telaLogin();
 	}
 	
 	public void criarTabelas(){
+		usuariosPanel.remove(bxListaCliente);
+		agendamentosPanel.remove(bxListaAgendamento);
 		this.remove(usuariosPanel);
 		this.remove(agendamentosPanel);
+		
+		bxListaAgendamento = Box.createVerticalBox();
+		bxAgendamento = Box.createHorizontalBox();
+		bxListaCliente = Box.createVerticalBox();
+		bxCliente = Box.createHorizontalBox();
+		
+		bxAgendamento.add(lbAgendamentos);
+		bxListaAgendamento.add(bxAgendamento);
+		bxAgendamento = Box.createHorizontalBox();
+		bxAgendamento.add(new JLabel("#"));
+		bxAgendamento.add(new JLabel("Arquivo"));
+		bxAgendamento.add(new JLabel("Data"));
+		bxAgendamento.add(new JLabel("Estado"));
+		bxAgendamento.setOpaque(true);
+		bxAgendamento.setBackground(cinzaEscuro);
+		bxListaAgendamento.add(bxAgendamento);
+		
+		bxCliente.add(lbUsuarios);
+		bxListaCliente.add(bxCliente);
+		bxCliente = Box.createHorizontalBox();
+		bxCliente.add(new JLabel("#"));
+		bxCliente.add(new JLabel("Login"));
+		bxCliente.add(new JLabel("Endereço"));
+		bxCliente.add(new JLabel("Porta"));
+		bxCliente.setOpaque(true);
+		bxCliente.setBackground(cinzaEscuro);
+		bxListaCliente.add(bxCliente);
 		
 		for(Cliente c : fachada.getClientes()){
 			bxCliente = Box.createHorizontalBox();
@@ -68,6 +104,8 @@ public class Principal extends JPanel{
 			bxCliente.add(new JLabel(c.getNome()));
 			bxCliente.add(new JLabel(c.getEndereco()));
 			bxCliente.add(new JLabel(Integer.toString(c.getPorta())));
+			bxCliente.setOpaque(true);
+			bxCliente.setBackground(cinzaClaro);
 			bxListaCliente.add(bxCliente);
 		}
 		usuariosPanel.add(bxListaCliente);
@@ -78,6 +116,8 @@ public class Principal extends JPanel{
 			bxAgendamento.add(new JLabel(a.getArquivo()));
 			bxAgendamento.add(new JLabel(a.getData()));
 			bxAgendamento.add(new JLabel(tela.rotuloEstado(a.getEstado())));
+			bxAgendamento.setOpaque(true);
+			bxAgendamento.setBackground(cinzaClaro);
 			bxListaAgendamento.add(bxAgendamento);
 		}
 		agendamentosPanel.add(bxListaAgendamento);
@@ -89,18 +129,32 @@ public class Principal extends JPanel{
 	}
 
 	public void atualizar() {
-		usuariosPanel.remove(tbUsuarios);
-		agendamentosPanel.remove(tbAgendamentos);
-		
 		criarTabelas();
-		
-		usuariosPanel.add(tbUsuarios);
-		agendamentosPanel.add(tbAgendamentos);
-		
-		this.add(usuariosPanel);
-		this.add(agendamentosPanel);
-		
-		this.validate();
+	}
+	
+	private void telaLogin() {
+		configPanel = new JPanel();
+		JLabel lbPorta = new JLabel("Porta");
+		final JTextField tfPorta = new JTextField(10);
+		tfPorta.setText("2016");
+		JButton btPorta = new JButton("Setar Porta");
+		btPorta.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int porta = Integer.parseInt(tfPorta.getText());
+				if(porta>1024)
+					tela.setarPorta(porta);
+			}
+		});
+		configPanel.add(lbPorta);
+		configPanel.add(tfPorta);
+		configPanel.add(btPorta);
+		this.add(configPanel);
+	}
+
+	public void telaPrincipal(String endereco) {
+		this.remove(configPanel);
+		System.out.println(endereco);
+		criarTabelas();
 	}
 
 }
