@@ -45,7 +45,7 @@ public class Fachada {
 		banco.carregaUsuarios();
 		banco.carregaAgendamentos();
 		tela.inicial();
-		setarPorta(2016);
+//		setarPorta(2016);
 	}
 
 	public int cadastrarCliente(String nome, String chave, String endereco, int porta) {

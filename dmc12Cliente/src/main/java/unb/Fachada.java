@@ -43,7 +43,7 @@ public class Fachada {
 	public void init() {
 		tela.inicial();
 		porta = conexao.getPorta();
-		setarPorta(2016);
+//		setarPorta(2016);
 //		entrar("natan", "123");
 //		agendar(" /Users/natan.junior/teste 01/07/2016 10:40:10");
 	}

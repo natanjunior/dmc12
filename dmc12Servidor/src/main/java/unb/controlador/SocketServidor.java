@@ -35,7 +35,6 @@ public class SocketServidor implements Runnable{
 	}
 	
 	public String comando(String payload){
-		System.out.println(payload);
 		String[] comandos = payload.split(" ");
 		String retorno = null;
 		switch(comandos[0]){
